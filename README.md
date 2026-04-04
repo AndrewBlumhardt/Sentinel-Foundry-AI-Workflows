@@ -1,6 +1,6 @@
 # Sentinel Foundry AI Workflows
 
-ARM templates for Azure Logic App workflows that integrate Microsoft Sentinel, Azure Monitor Logs, and Azure OpenAI or Foundry in Azure Government.
+ARM templates for Azure Logic App workflows that integrate Microsoft Sentinel, Azure Monitor Logs, and Azure AI Foundry. Works in both Azure commercial and Azure Government.
 
 ![Foundry](./images/Foundry.png)
 
@@ -11,7 +11,7 @@ These workflows were exported from an existing environment and repackaged so eac
 - `template.json` for deployment
 - A local `README.md` with prerequisites, screenshot, and Deploy to Azure buttons
 
-The old `parameters.json` files are not needed in this repo because each template already contains default parameter values, and ARM deployments support direct parameter overrides at deploy time.
+The templates were initially built and tested in an Azure Government environment to validate the pattern for federal teams, but the design works in both Azure commercial and Azure Government with endpoint and connection adjustments at deploy time.
 
 ## Why This Pattern
 
@@ -23,6 +23,8 @@ This repository follows an API-first SOC pattern:
 - Keep orchestration in Logic Apps while keeping model behavior in the API request
 
 This is designed as a practical alternative and complement to Security Copilot for teams that need flexibility across budget, environment, or platform constraints.
+
+This repository is part of a series. The first article, [Building a SOC AI API with Azure AI Foundry](https://www.techchat.blog/2026/03/28/building-a-soc-ai-api-with-azure-ai-foundry/), covers setting up the Foundry hub, project, and model deployment. A follow-up article covering these Logic App workflows will be published soon.
 
 ## Screenshots
 
@@ -44,8 +46,7 @@ This is designed as a practical alternative and complement to Security Copilot f
 
 ## Prerequisites
 
-- Azure subscription with permission to deploy `Microsoft.Logic/workflows`
-- Azure Government selected if you are using the current exported defaults
+- Azure subscription (commercial or government) with permission to deploy `Microsoft.Logic/workflows`
 - Existing `Microsoft.Web/connections` resources for Sentinel and Azure Monitor Logs where required by the template
 - An Azure AI Foundry project and deployed model (see setup steps below)
 - Managed identity permissions for the deployed Logic App (see permission table below)
@@ -125,6 +126,5 @@ PowerShell example:
 
 ## Notes
 
-- Deploy button links assume the GitHub repository is `AndrewBlumhardt/Sentinel-Foundry-AI-Workflows` on the `main` branch
-- Folder names were normalized for common spelling errors
+- The embedded template defaults reference Azure Government endpoints and connection resource IDs - override these at deploy time for commercial Azure
 - Some workflows still need runtime hardening before production use
