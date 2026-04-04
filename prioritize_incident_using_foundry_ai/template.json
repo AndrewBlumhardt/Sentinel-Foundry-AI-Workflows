@@ -1,0 +1,204 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_prioritize_incident_using_foundry_ai_name": {
+            "defaultValue": "prioritize-incident-using-foundry-ai",
+            "type": "String"
+        },
+        "connections_azuresentinel_3_externalid": {
+            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuresentinel-3",
+            "type": "String"
+        },
+        "connections_azuremonitorlogs_externalid": {
+            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuremonitorlogs",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_prioritize_incident_using_foundry_ai_name')]",
+            "location": "usgovtexas",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "metadata": {
+                        "notes": {}
+                    },
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Microsoft_Sentinel_incident": {
+                            "type": "ApiConnectionWebhook",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel-1']['connectionId']"
+                                    }
+                                },
+                                "body": {
+                                    "callback_url": "@listCallbackUrl()"
+                                },
+                                "path": "/incident-creation"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "HTTP_-_Call_Foundry": {
+                            "runAfter": {
+                                "Run_KQL_Query": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "uri": "https://soc-ai-llm-api.openai.azure.us/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview",
+                                "method": "POST",
+                                "body": {
+                                    "messages": [
+                                        {
+                                            "role": "system",
+                                            "content": "You are a cybersecurity incident prioritization assistant. Your task is to evaluate whether the priority (severity) of a target incident should be adjusted based on the provided incident details (raw JSON), results from recent and historical incident data (KQL query output), any available grounding on prioritization rules, and general cybersecurity knowledge. Assess the current severity and determine if it should be raised, lowered, or remain unchanged.\n\nYou MUST select one of the following severity values only: Informational, Low, Medium, High.\n\nConsider impact, scope, affected assets, privilege level, and potential risk. Compare against recent incident patterns and historical closure trends. Use grounding rules if provided but do not rely on them exclusively. Do not speculate or assume missing data.\n\nYou MUST return valid JSON only with no additional text or formatting.\n\nOutput schema:\n{\n  \"recommendedSeverity\": \"<Informational | Low | Medium | High>\",\n  \"explanation\": \"<Brief justification including whether severity should change or remain the same>\"\n}\n\nIf no change is warranted, return the current severity and clearly state that no change is recommended. Keep the explanation concise and based only on provided data and known patterns."
+                                        },
+                                        {
+                                            "role": "user",
+                                            "content": "Evaluate the following incident and recommend severity adjustment.\n\nIncident: @{triggerBody()}\n\nRelated incidents and trends: @{body('Run_KQL_Query')}\n\nGrounding (if available): "
+                                        }
+                                    ]
+                                },
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity",
+                                    "audience": "https://cognitiveservices.azure.us"
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Incident_comment": {
+                            "runAfter": {
+                                "HTTP_-_Call_Foundry": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel-1']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "body": {
+                                    "incidentArmId": "@triggerBody()?['object']?['id']",
+                                    "message": "<p class=\"editor-paragraph\">@{json(outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content'])?['explanation']}</p>"
+                                },
+                                "path": "/Incidents/Comment"
+                            }
+                        },
+                        "Wait_for_Details": {
+                            "runAfter": {},
+                            "type": "Wait",
+                            "inputs": {
+                                "interval": {
+                                    "count": 3,
+                                    "unit": "Second"
+                                }
+                            },
+                            "description": "Optional delay recommended for automated trigger, wait for the incident to gather multiple entities. Remove or lower for manual execution."
+                        },
+                        "Run_KQL_Query": {
+                            "runAfter": {
+                                "Wait_for_Details": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuremonitorlogs']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "body": {
+                                    "query": "SecurityIncident | where TimeGenerated > ago(2d) | summarize arg_max(TimeGenerated, *) by IncidentNumber",
+                                    "timerangetype": "3"
+                                },
+                                "path": "/queryDataV2",
+                                "queries": {
+                                    "subscriptions": "c4139225-5edc-4fe4-a426-f62c934cd8ba",
+                                    "resourcegroups": "rg-Sentinel",
+                                    "resourcetype": "Log Analytics Workspace",
+                                    "resourcename": "FedAIRS"
+                                }
+                            }
+                        },
+                        "Set_Severity": {
+                            "runAfter": {
+                                "Incident_comment": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel-1']['connectionId']"
+                                    }
+                                },
+                                "method": "put",
+                                "body": {
+                                    "incidentArmId": "@triggerBody()?['object']?['id']",
+                                    "severity": "@json(outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content'])?['recommendedSeverity']"
+                                },
+                                "path": "/Incidents"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azuresentinel-1": {
+                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuresentinel",
+                                "connectionId": "[parameters('connections_azuresentinel_3_externalid')]",
+                                "connectionName": "azuresentinel-3",
+                                "connectionProperties": {
+                                    "authentication": {
+                                        "type": "ManagedServiceIdentity"
+                                    }
+                                }
+                            },
+                            "azuremonitorlogs": {
+                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuremonitorlogs",
+                                "connectionId": "[parameters('connections_azuremonitorlogs_externalid')]",
+                                "connectionName": "azuremonitorlogs",
+                                "connectionProperties": {
+                                    "authentication": {
+                                        "type": "ManagedServiceIdentity"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

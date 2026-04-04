@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_Get_Recovery_Steps_Foundry_HTTP_MI_name": {
+            "defaultValue": "Get-Recovery-Steps-Foundry-HTTP-MI",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_Get_Recovery_Steps_Foundry_HTTP_MI_name')]",
+            "location": "usgovtexas",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "metadata": {
+                        "notes": {}
+                    },
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "HTTP_Request_from_Workbook": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "method": "POST",
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "question": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "HTTP_-_Call_Foundry": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                                "uri": "https://soc-ai-llm-api.openai.azure.us/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview",
+                                "method": "POST",
+                                "body": {
+                                    "messages": [
+                                        {
+                                            "role": "system",
+                                            "content": "You are an incident response assistant focused on Microsoft Sentinel, Defender XDR, and Entra ID. Use only the provided user input as the question and repeat it exactly. Provide clear, concise response steps aligned to Microsoft security tooling. Do not use HTML, markdown, bullet symbols, or code formatting. Return a simple numbered list with no more than 10 steps. Each step should be one line and directly actionable. Format exactly as: Question: <original question> Source: <SPO Document - filename.docx OR General Knowledge> Response: <numbered steps>. Never invent a filename."
+                                        },
+                                        {
+                                            "role": "user",
+                                            "content": "Generate an incident response recommendation for this question: @{triggerBody()?['question']}"
+                                        }
+                                    ]
+                                },
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity",
+                                    "audience": "https://cognitiveservices.azure.us"
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Response_to_Workbook": {
+                            "runAfter": {
+                                "HTTP_-_Call_Foundry": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "statusCode": 200,
+                                "body": "@{outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content']}\n"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {}
+                    }
+                }
+            }
+        }
+    ]
+}

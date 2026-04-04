@@ -1,0 +1,127 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_send_incident_to_foundry_ai_name": {
+            "defaultValue": "send-incident-to-foundry-ai",
+            "type": "String"
+        },
+        "connections_azuresentinel_externalid": {
+            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuresentinel",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_send_incident_to_foundry_ai_name')]",
+            "location": "usgovtexas",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "metadata": {
+                        "notes": {}
+                    },
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Microsoft_Sentinel_incident": {
+                            "type": "ApiConnectionWebhook",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                    }
+                                },
+                                "body": {
+                                    "callback_url": "@listCallbackUrl()"
+                                },
+                                "path": "/incident-creation"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "HTTP_-_Call_Foundry": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                                "uri": "https://soc-ai-llm-api.openai.azure.us/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview",
+                                "method": "POST",
+                                "body": {
+                                    "messages": [
+                                        {
+                                            "role": "system",
+                                            "content": "You are an incident response assistant focused on Microsoft Sentinel, Defender XDR, and Entra ID. You will be provided with an incident name and description. Use only the provided input and do not rewrite or replace it. Provide clear, concise response steps aligned to Microsoft security tooling. Do not use HTML, markdown, bullet symbols, or code formatting. Return a simple numbered list with no more than 10 steps. Each step must be one line and directly actionable. Format exactly as: Question: <original input> Source: <SPO Document - filename.docx OR General Knowledge> Response: <numbered steps>. Never invent a filename."
+                                        },
+                                        {
+                                            "role": "user",
+                                            "content": "@{triggerBody()?['object']?['properties']?['title']}, @{triggerBody()?['object']?['properties']?['description']}, @{triggerBody()?['object']?['properties']?['severity']}, @{triggerBody()?['object']?['properties']?['additionalData']?['tactics']}, @{triggerBody()?['object']?['properties']?['relatedEntities']}"
+                                        }
+                                    ]
+                                },
+                                "authentication": {
+                                    "type": "ManagedServiceIdentity",
+                                    "audience": "https://cognitiveservices.azure.us"
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Add_comment_to_incident_(V3)": {
+                            "runAfter": {
+                                "HTTP_-_Call_Foundry": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "body": {
+                                    "incidentArmId": "@triggerBody()?['object']?['id']",
+                                    "message": "<p class=\"editor-paragraph\">@{outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content']}</p>"
+                                },
+                                "path": "/Incidents/Comment"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azuresentinel": {
+                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuresentinel",
+                                "connectionId": "[parameters('connections_azuresentinel_externalid')]",
+                                "connectionName": "azuresentinel",
+                                "connectionProperties": {
+                                    "authentication": {
+                                        "type": "ManagedServiceIdentity"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
