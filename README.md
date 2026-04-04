@@ -1,30 +1,14 @@
 # Sentinel Foundry AI Workflows
 
-ARM templates for Azure Logic App workflows that integrate Microsoft Sentinel, Azure Monitor Logs, and Azure AI Foundry. Works in both Azure commercial and Azure Government.
+Azure Logic App ARM templates that embed AI-assisted capabilities directly into Microsoft Sentinel workflows using a private Azure AI Foundry LLM endpoint.
 
-![Foundry](./images/Foundry.png)
+This is a working demonstration of a core idea: **one model deployment can serve many different SOC use cases because the logic lives in the API call itself, not in the model.** Each workflow sends a structured request with a system prompt that defines the task - summarize an incident, generate KQL, assess severity, research entities, evaluate PIM activity. The model stays the same. The behavior changes based on how the request is constructed.
 
-## Overview
+This pattern works for teams without Microsoft Security Copilot access and as an added capability for teams that have it. It is practical for budget-constrained environments, government clouds, and any team that wants to integrate AI into existing SOC workflows without building a chatbot or adopting a new platform.
 
-These workflows were exported from an existing environment and repackaged so each workflow folder can stand on its own with:
+The templates were originally built and tested in Azure Government to validate the pattern for federal teams. With endpoint and connection adjustments at deploy time, they work equally well in Azure commercial.
 
-- `template.json` for deployment
-- A local `README.md` with prerequisites, screenshot, and Deploy to Azure buttons
-
-The templates were initially built and tested in an Azure Government environment to validate the pattern for federal teams, but the design works in both Azure commercial and Azure Government with endpoint and connection adjustments at deploy time.
-
-## Why This Pattern
-
-This repository follows an API-first SOC pattern:
-
-- Start with a private Azure-hosted LLM API instead of a chatbot-first design
-- Reuse one model endpoint across multiple SOC tasks by changing request instructions and structured inputs
-- Embed targeted AI capability directly into existing workflows such as Sentinel automation, workbook helpers, and enrichment steps
-- Keep orchestration in Logic Apps while keeping model behavior in the API request
-
-This is designed as a practical alternative and complement to Security Copilot for teams that need flexibility across budget, environment, or platform constraints.
-
-This repository is part of a series. The first article, [Building a SOC AI API with Azure AI Foundry](https://www.techchat.blog/2026/03/28/building-a-soc-ai-api-with-azure-ai-foundry/), covers setting up the Foundry hub, project, and model deployment. A follow-up article covering these Logic App workflows will be published soon.
+This repository is part of a series. The first article, [Building a SOC AI API with Azure AI Foundry](https://www.techchat.blog/2026/03/28/building-a-soc-ai-api-with-azure-ai-foundry/), covers setting up the Foundry hub, project, and model deployment that these workflows depend on. A follow-up article covering the Logic App workflows in this repo will be published soon.
 
 ## Screenshots
 
@@ -53,7 +37,11 @@ This repository is part of a series. The first article, [Building a SOC AI API w
 
 ## Setting Up Azure AI Foundry
 
-These workflows call a private Foundry API endpoint using Managed Identity. If you do not already have a Foundry hub and project, follow these steps.
+These workflows call a private Foundry API endpoint using Managed Identity. The [Building a SOC AI API with Azure AI Foundry](https://www.techchat.blog/2026/03/28/building-a-soc-ai-api-with-azure-ai-foundry/) article covers this setup in full detail. The steps below are a quick reference.
+
+![Foundry](./images/Foundry.png)
+
+If you do not already have a Foundry hub and project, follow these steps.
 
 ### 1. Create a Resource Group
 
