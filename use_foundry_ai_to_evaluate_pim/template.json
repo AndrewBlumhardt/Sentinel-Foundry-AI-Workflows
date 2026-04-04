@@ -80,7 +80,7 @@
                                         },
                                         {
                                             "role": "user",
-                                            "content": "Analyze the following PIM activity. Recent requests:  Historical 90-day baseline: @{body('Run_KQL_Query')} Grounding (if available): "
+                                            "content": "Analyze the following PIM activity. The data below contains both recent requests (last 24 hours) and a 90-day historical baseline per user: @{body('Run_KQL_Query')} Grounding (if available): "
                                         }
                                     ]
                                 },

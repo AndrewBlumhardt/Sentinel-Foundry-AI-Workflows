@@ -63,7 +63,7 @@
                                         },
                                         {
                                             "role": "user",
-                                            "content": "Generate a KQL query: @{triggerBody()?['question']}. ** Only respond with the query.\n If there are any statistical requests in the user question utilize the bin(TimeGenerated, 5m) operator.\n **  Return the query in HTML markdown."
+                                            "content": "Generate a KQL query: @{triggerBody()?['question']}"
                                         }
                                     ]
                                 },
