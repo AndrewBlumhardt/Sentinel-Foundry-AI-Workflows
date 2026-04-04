@@ -13,6 +13,17 @@ These workflows were exported from an existing environment and repackaged so eac
 
 The old `parameters.json` files are not needed in this repo because each template already contains default parameter values, and ARM deployments support direct parameter overrides at deploy time.
 
+## Why This Pattern
+
+This repository follows an API-first SOC pattern:
+
+- Start with a private Azure-hosted LLM API instead of a chatbot-first design
+- Reuse one model endpoint across multiple SOC tasks by changing request instructions and structured inputs
+- Embed targeted AI capability directly into existing workflows such as Sentinel automation, workbook helpers, and enrichment steps
+- Keep orchestration in Logic Apps while keeping model behavior in the API request
+
+This is designed as a practical alternative and complement to Security Copilot for teams that need flexibility across budget, environment, or platform constraints.
+
 ## Screenshots
 
 ![Workflow list](./images/master%20list.png)

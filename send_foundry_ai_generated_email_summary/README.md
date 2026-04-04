@@ -24,4 +24,5 @@ Builds an HTML incident summary intended for email or message delivery and write
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - The screenshot currently reuses the incident workflow image due to no separate image file for this workflow

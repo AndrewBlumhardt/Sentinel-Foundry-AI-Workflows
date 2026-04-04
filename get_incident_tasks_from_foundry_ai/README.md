@@ -23,4 +23,5 @@ Generates a short prioritized task list for a Microsoft Sentinel incident and cr
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override template parameters during deployment if your connection resource IDs or naming differ from the defaults

@@ -24,5 +24,6 @@ Closes a low or informational Microsoft Sentinel incident when the workflow dete
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override connection resource IDs during deployment if they differ from the exported defaults
 - This workflow uses both Sentinel incident data and Azure Monitor history

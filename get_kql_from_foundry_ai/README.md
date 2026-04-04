@@ -22,4 +22,5 @@ Exposes an HTTP-triggered Logic App workflow that accepts a natural language que
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - After deployment, copy the generated HTTP callback URL into the workbook or caller that will invoke the workflow

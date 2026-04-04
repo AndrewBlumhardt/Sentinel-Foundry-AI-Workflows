@@ -23,5 +23,6 @@ Enriches related Sentinel incident entities such as accounts, file hashes, IPs, 
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - This workflow preserves the original exported folder naming
 - Update connection resource IDs if your Sentinel connection names differ from the template defaults

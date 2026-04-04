@@ -23,4 +23,5 @@ Sends core incident context to the model and writes recommended incident respons
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override template parameters during deployment if your Sentinel connection resource ID differs from the default

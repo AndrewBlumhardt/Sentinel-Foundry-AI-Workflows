@@ -23,4 +23,5 @@ Runs on a recurrence, queries PIM request history from Azure Monitor Logs, and g
 
 ## Notes
 
+- This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - This workflow runs on a recurrence trigger rather than Sentinel incident creation
