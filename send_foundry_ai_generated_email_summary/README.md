@@ -1,6 +1,6 @@
 # Generate Email Summary Using Foundry AI
 
-Builds an HTML incident summary intended for email or message delivery and writes the generated content back to the Sentinel incident as a comment.
+Produces an HTML incident summary designed for email or Teams notifications. For testing, the workflow writes output to incident comments. Production use requires an email-enabled user or a messaging connector such as Office 365 or Teams.
 
 ## Prerequisites
 

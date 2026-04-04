@@ -1,6 +1,6 @@
 # Prioritize Incidents Using Foundry AI
 
-Evaluates a Sentinel incident against recent incident history, recommends a severity value, comments on the decision, and updates the incident severity.
+Evaluates incident severity based on current incident details and historical trends. Recommends whether severity should change, documents the reasoning in the incident, and updates the severity field when the recommendation meets a threshold.
 
 ## Prerequisites
 

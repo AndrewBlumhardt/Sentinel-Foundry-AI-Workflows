@@ -1,6 +1,6 @@
 # Send Incident Context Using Foundry AI
 
-Sends core incident context to the model and writes recommended incident response guidance back to the Sentinel incident as a comment.
+Sends incident details including title, severity, and related alerts to the Foundry model and adds the AI-generated summary and response guidance directly to the Sentinel incident as a comment.
 
 ## Prerequisites
 

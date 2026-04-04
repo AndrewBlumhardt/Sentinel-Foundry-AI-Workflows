@@ -1,6 +1,6 @@
 # Evaluate PIM Activity Using Foundry AI
 
-Runs on a recurrence, queries PIM request history from Azure Monitor Logs, and generates an HTML summary of notable or unusual PIM activity.
+Runs on a daily schedule, queries Entra ID PIM request history from Azure Monitor Logs, compares recent activity against historical patterns, and generates an HTML summary highlighting unusual or notable activity.
 
 ## Prerequisites
 

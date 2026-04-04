@@ -1,6 +1,6 @@
 # Generate Incident Tasks Using Foundry AI
 
-Generates a short prioritized task list for a Microsoft Sentinel incident and creates those tasks directly on the incident.
+Generates up to ten investigation or response tasks based on incident details, then loops through the results to create each task directly on the Sentinel incident and adds supporting context.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Generate KQL Using Foundry AI
 
-Exposes an HTTP-triggered Logic App workflow that accepts a natural language question and returns a generated KQL query.
+Accepts a natural language question via webhook, typically triggered from a Sentinel workbook, and returns a generated KQL query. Uses the same HTTP and Managed Identity pattern as the recovery steps workflow - the only meaningful difference is the system prompt.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Entity Research Using Foundry AI
 
-Enriches related Sentinel incident entities such as accounts, file hashes, IPs, hosts, and URLs, then writes the result back to the incident as a comment.
+Retrieves entities from a Sentinel incident and enriches them using the model. A short delay is included to ensure entities are available before the workflow runs. This becomes significantly more powerful when combined with external grounding such as threat intelligence or Azure AI Search.
 
 ## Prerequisites
 

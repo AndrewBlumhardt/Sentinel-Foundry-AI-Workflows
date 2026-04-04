@@ -1,6 +1,6 @@
 # Close Low-Risk False Positives Using Foundry AI
 
-Closes a low or informational Microsoft Sentinel incident when the workflow determines it matches a historically benign or likely false positive pattern.
+Compares a Sentinel incident against historical closure patterns and recommends whether to close it as a likely false positive. If the threshold is met, it closes the incident and documents the reasoning. Over time, this begins to reflect how analysts have historically handled similar cases.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Generate Recovery Steps Using Foundry AI
 
-Exposes an HTTP-triggered Logic App workflow that accepts a question and returns concise recovery or response steps.
+Accepts a question via webhook, typically triggered from a Sentinel workbook, and returns structured recovery or response steps using Managed Identity for authentication. Grounding on internal SOPs or runbooks can be added through the system prompt.
 
 ## Prerequisites
 
