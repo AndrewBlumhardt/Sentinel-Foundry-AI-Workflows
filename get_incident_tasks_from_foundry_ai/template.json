@@ -133,7 +133,7 @@
                         "value": {
                             "azuresentinel-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                    "connectionId": "/providers/Microsoft.Web/connections/azuresentinel-1",
+                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuresentinel-1')]",
                                 "connectionName": "azuresentinel-1",
                                 "connectionProperties": {
                                     "authentication": {
