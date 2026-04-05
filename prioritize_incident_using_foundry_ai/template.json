@@ -173,7 +173,7 @@
                         "value": {
                             "azuresentinel-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                    "connectionId": "",
+                                    "connectionId": "/providers/Microsoft.Web/connections/azuresentinel-3",
                                 "connectionName": "azuresentinel-3",
                                 "connectionProperties": {
                                     "authentication": {
@@ -183,7 +183,7 @@
                             },
                             "azuremonitorlogs": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                    "connectionId": "",
+                                    "connectionId": "/providers/Microsoft.Web/connections/azuremonitorlogs",
                                 "connectionName": "azuremonitorlogs",
                                 "connectionProperties": {
                                     "authentication": {
