@@ -10,6 +10,11 @@
             "defaultValue": "",
             "type": "String"
         }
+        ,
+        "connections_azuremonitorlogs_2_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
     },
     "variables": {},
     "resources": [
@@ -126,7 +131,7 @@
                         "value": {
                             "azuremonitorlogs-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuremonitorlogs-2')]",
+                                    "connectionId": "[parameters('connections_azuremonitorlogs_2_externalid')]",
                                 "connectionName": "azuremonitorlogs-2",
                                 "connectionProperties": {
                                     "authentication": {

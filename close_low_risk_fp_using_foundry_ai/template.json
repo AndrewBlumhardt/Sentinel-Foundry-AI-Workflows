@@ -10,6 +10,16 @@
             "defaultValue": "",
             "type": "String"
         }
+        ,
+        "connections_azuresentinel_4_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
+        ,
+        "connections_azuremonitorlogs_1_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
     },
     "variables": {},
     "resources": [
@@ -191,7 +201,7 @@
                         "value": {
                             "azuresentinel": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuresentinel-4')]",
+                                    "connectionId": "[parameters('connections_azuresentinel_4_externalid')]",
                                 "connectionName": "azuresentinel-4",
                                 "connectionProperties": {
                                     "authentication": {
@@ -201,7 +211,7 @@
                             },
                             "azuremonitorlogs-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuremonitorlogs-1')]",
+                                    "connectionId": "[parameters('connections_azuremonitorlogs_1_externalid')]",
                                 "connectionName": "azuremonitorlogs-1",
                                 "connectionProperties": {
                                     "authentication": {

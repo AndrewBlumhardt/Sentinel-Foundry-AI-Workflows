@@ -6,6 +6,11 @@
             "defaultValue": "send-incident-to-foundry-ai",
             "type": "String"
         }
+        ,
+        "connections_azuresentinel_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
     },
     "variables": {},
     "resources": [
@@ -106,7 +111,7 @@
                         "value": {
                             "azuresentinel": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuresentinel')]",
+                                    "connectionId": "[parameters('connections_azuresentinel_externalid')]",
                                 "connectionName": "azuresentinel",
                                 "connectionProperties": {
                                     "authentication": {

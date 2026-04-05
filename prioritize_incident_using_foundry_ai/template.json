@@ -10,6 +10,16 @@
             "defaultValue": "",
             "type": "String"
         }
+        ,
+        "connections_azuresentinel_3_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
+        ,
+        "connections_azuremonitorlogs_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
     },
     "variables": {},
     "resources": [
@@ -173,7 +183,7 @@
                         "value": {
                             "azuresentinel-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuresentinel-3')]",
+                                    "connectionId": "[parameters('connections_azuresentinel_3_externalid')]",
                                 "connectionName": "azuresentinel-3",
                                 "connectionProperties": {
                                     "authentication": {
@@ -183,7 +193,7 @@
                             },
                             "azuremonitorlogs": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                    "connectionId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuremonitorlogs')]",
+                                    "connectionId": "[parameters('connections_azuremonitorlogs_externalid')]",
                                 "connectionName": "azuremonitorlogs",
                                 "connectionProperties": {
                                     "authentication": {
