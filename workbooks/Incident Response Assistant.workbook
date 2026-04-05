@@ -1,0 +1,135 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Incident Response Assistant\n\nSubmit a question about an alert or incident to receive structured investigation steps and response recommendations. \n\nResponses prioritize internally grounded sources when available and fall back to best-practice guidance to support consistent and effective incident handling."
+      },
+      "name": "header-text"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "param-question",
+            "version": "KqlParameterItem/1.0",
+            "name": "NLQuestion",
+            "label": "Ask a question",
+            "type": 1,
+            "description": "Enter your question in plain English. The system will convert it to a KQL query.",
+            "isRequired": true,
+            "isGlobal": true,
+            "typeSettings": {
+              "isSearchBox": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          }
+        ],
+        "style": "formHorizontal",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "{\"version\":\"1.0.0\",\"content\":\"[\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"How do I resolve malware on a Windows device?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"What are the steps to isolate a compromised machine?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"How do I analyze a suspicious PowerShell execution?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"What steps should I take after detecting ransomware activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"How do I validate a suspicious process on an endpoint?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"How do I investigate unauthorized software installation on a device?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"What should I do if endpoint protection is disabled unexpectedly?\\\" },\\r\\n  { \\\"Category\\\": \\\"Device\\\", \\\"Question\\\": \\\"How do I respond to suspicious device configuration changes?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"What should I do if a user account is flagged as compromised?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"How do I verify unusual admin activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"How do I investigate a high-risk sign-in event?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"What steps should I take after detecting token theft activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"How do I investigate impossible travel sign-in events?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"How do I respond to suspicious MFA fatigue attacks?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"How do I validate abnormal user behavior patterns?\\\" },\\r\\n  { \\\"Category\\\": \\\"User\\\", \\\"Question\\\": \\\"What should I do if a user is added to privileged roles unexpectedly?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"How do I investigate a phishing email reported by a user?\\\" },\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"What should I do when detecting suspicious mailbox rules?\\\" },\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"How do I analyze a malicious email attachment?\\\" },\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"What steps should I take for business email compromise (BEC)?\\\" },\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"How do I investigate email forwarding rule abuse?\\\" },\\r\\n  { \\\"Category\\\": \\\"Email\\\", \\\"Question\\\": \\\"What should I do if a user clicks a phishing link?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"How do I analyze abnormal network connections from a device?\\\" },\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"What are the steps to respond to command and control communication?\\\" },\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"How do I investigate unusual outbound traffic spikes?\\\" },\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"What should I do if I detect suspicious DNS queries?\\\" },\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"How do I respond to port scanning activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"Network\\\", \\\"Question\\\": \\\"How do I investigate lateral movement in the network?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"AD\\\", \\\"Question\\\": \\\"How do I investigate suspicious Azure AD sign-in logs?\\\" },\\r\\n  { \\\"Category\\\": \\\"AD\\\", \\\"Question\\\": \\\"What should I do if a service principal shows unusual activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"AD\\\", \\\"Question\\\": \\\"How do I validate changes to directory roles and permissions?\\\" },\\r\\n  { \\\"Category\\\": \\\"AD\\\", \\\"Question\\\": \\\"What steps should I take after detecting risky sign-in policies being modified?\\\" },\\r\\n  { \\\"Category\\\": \\\"AD\\\", \\\"Question\\\": \\\"How do I investigate abnormal group membership changes?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"Cloud\\\", \\\"Question\\\": \\\"What should I do if I detect anomalous Azure resource changes?\\\" },\\r\\n  { \\\"Category\\\": \\\"Cloud\\\", \\\"Question\\\": \\\"How do I investigate suspicious activity in cloud storage accounts?\\\" },\\r\\n  { \\\"Category\\\": \\\"Cloud\\\", \\\"Question\\\": \\\"What steps should I take after detecting unauthorized API calls?\\\" },\\r\\n  { \\\"Category\\\": \\\"Cloud\\\", \\\"Question\\\": \\\"How do I validate unusual activity in cloud workloads?\\\" },\\r\\n  { \\\"Category\\\": \\\"Cloud\\\", \\\"Question\\\": \\\"How do I investigate exposure of storage containers?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"Web\\\", \\\"Question\\\": \\\"How do I investigate a detected web shell?\\\" },\\r\\n  { \\\"Category\\\": \\\"Web\\\", \\\"Question\\\": \\\"What should I do if a website is serving malicious content?\\\" },\\r\\n  { \\\"Category\\\": \\\"Web\\\", \\\"Question\\\": \\\"How do I respond to suspicious web application requests?\\\" },\\r\\n  { \\\"Category\\\": \\\"Web\\\", \\\"Question\\\": \\\"How do I analyze abnormal web traffic patterns?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"App\\\", \\\"Question\\\": \\\"How do I investigate suspicious OAuth application consent?\\\" },\\r\\n  { \\\"Category\\\": \\\"App\\\", \\\"Question\\\": \\\"What should I do if an application is accessing excessive data?\\\" },\\r\\n  { \\\"Category\\\": \\\"App\\\", \\\"Question\\\": \\\"How do I validate abnormal application behavior?\\\" },\\r\\n  { \\\"Category\\\": \\\"App\\\", \\\"Question\\\": \\\"What steps should I take after detecting unauthorized app registrations?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"SQL\\\", \\\"Question\\\": \\\"How do I investigate suspicious SQL query activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"SQL\\\", \\\"Question\\\": \\\"What should I do if I detect potential SQL injection attempts?\\\" },\\r\\n  { \\\"Category\\\": \\\"SQL\\\", \\\"Question\\\": \\\"How do I analyze abnormal database access patterns?\\\" },\\r\\n  { \\\"Category\\\": \\\"SQL\\\", \\\"Question\\\": \\\"What steps should I take after detecting unauthorized database changes?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"Phone\\\", \\\"Question\\\": \\\"How do I investigate suspicious mobile device activity?\\\" },\\r\\n  { \\\"Category\\\": \\\"Phone\\\", \\\"Question\\\": \\\"What should I do if a mobile device is compromised?\\\" },\\r\\n  { \\\"Category\\\": \\\"Phone\\\", \\\"Question\\\": \\\"How do I respond to SIM swap fraud indicators?\\\" },\\r\\n\\r\\n  { \\\"Category\\\": \\\"AI\\\", \\\"Question\\\": \\\"How do I investigate misuse of AI applications in the environment?\\\" },\\r\\n  { \\\"Category\\\": \\\"AI\\\", \\\"Question\\\": \\\"What should I do if sensitive data is exposed through AI prompts?\\\" },\\r\\n  { \\\"Category\\\": \\\"AI\\\", \\\"Question\\\": \\\"How do I validate abnormal AI service usage patterns?\\\" },\\r\\n  { \\\"Category\\\": \\\"AI\\\", \\\"Question\\\": \\\"What steps should I take after detecting unauthorized AI model access?\\\" }\\r\\n]\",\"transformers\":null}",
+        "size": 1,
+        "exportFieldName": "Question",
+        "exportParameterName": "NLQuestion",
+        "queryType": 8,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Question",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "80ch"
+              }
+            }
+          ],
+          "filter": true
+        }
+      },
+      "name": "query - 5"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "10152279-36bc-4c36-901a-c9e9c269f058",
+            "version": "KqlParameterItem/1.0",
+            "name": "SubmittedQuestion",
+            "type": 1,
+            "isGlobal": true,
+            "isHiddenWhenLocked": true,
+            "value": "What steps should I take after detecting ransomware activity?"
+          }
+        ],
+        "style": "above",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters-hidden"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "list",
+        "links": [
+          {
+            "id": "submit-button",
+            "cellValue": "SubmittedQuestion",
+            "linkTarget": "parameter",
+            "linkLabel": "Submit Question",
+            "subTarget": "{NLQuestion}",
+            "preText": "",
+            "postText": "",
+            "style": "primary"
+          }
+        ]
+      },
+      "name": "submit-link",
+      "styleSettings": {
+        "margin": "0 0 16px 0"
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "{\"version\":\"CustomEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"POST\",\"url\":\"https://<logic-app-callback-url>?api-version=2016-10-01&sp=%2Ftriggers%2FHTTP_Request_from_Workbook%2Frun&sv=1.0&sig=\",\"contentType\":\"text/plain\",\"urlParams\":[{\"key\":\"question\",\"value\":\"{SubmittedQuestion}\"}],\"transformers\":null}",
+        "size": 3,
+        "queryType": 10,
+        "visualization": "card",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Column",
+              "formatter": 1
+            }
+          ]
+        },
+        "textSettings": {
+          "style": "markdown"
+        }
+      },
+      "name": "query - 6 - Copy"
+    }
+  ],
+  "fallbackResourceIds": [
+    "/subscriptions/<subscription-id>/resourcegroups/<resource-group>/providers/microsoft.operationalinsights/workspaces/<workspace-name>"
+  ],
+  "fromTemplateId": "sentinel-UserWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

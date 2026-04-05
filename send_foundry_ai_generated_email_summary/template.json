@@ -13,6 +13,10 @@
         "connections_azuremonitorlogs_2_externalid": {
             "defaultValue": "",
             "type": "String"
+        },
+        "logAnalyticsWorkspaceName": {
+            "defaultValue": "",
+            "type": "String"
         }
     },
     "variables": {},
@@ -21,7 +25,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_send_foundry_ai_generated_email_summary_name')]",
-            "location": "usgovtexas",
+            "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
             },
@@ -121,9 +125,9 @@
                                 "path": "/queryDataV2",
                                 "queries": {
                                     "subscriptions": "[subscription().subscriptionId]",
-                                    "resourcegroups": "rg-Sentinel",
+                                    "resourcegroups": "[resourceGroup().name]",
                                     "resourcetype": "Log Analytics Workspace",
-                                    "resourcename": "FedAIRS"
+                                    "resourcename": "[parameters('logAnalyticsWorkspaceName')]"
                                 }
                             }
                         },

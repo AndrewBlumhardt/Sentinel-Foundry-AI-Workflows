@@ -17,7 +17,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_get_incident_tasks_from_foundry_ai_name')]",
-            "location": "usgovtexas",
+            "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
             },

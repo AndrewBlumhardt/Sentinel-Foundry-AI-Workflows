@@ -21,7 +21,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_entity_research_using_foundry_ai_name')]",
-            "location": "usgovtexas",
+            "location": "[resourceGroup().location]",
             "identity": {
                 "type": "SystemAssigned"
             },
