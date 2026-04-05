@@ -10,14 +10,14 @@ Retrieves entities from a Sentinel incident and enriches them using the model. A
 
 ## Screenshot
 
-![entity_research_using_foundry_ai](../images/entity_research_using_foundry_ai.png)
+<p align="center"><img src="../images/entity_research_using_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fentity_research_using_foundry_ai%2Ftemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fentity_research_using_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
-<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fentity_research_using_foundry_ai%2Ftemplate.json" target="_blank">
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fentity_research_using_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>
 

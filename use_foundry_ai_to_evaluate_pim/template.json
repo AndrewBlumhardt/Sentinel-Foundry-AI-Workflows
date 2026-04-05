@@ -7,7 +7,7 @@
             "type": "String"
         },
         "connections_azuremonitorlogs_2_externalid": {
-            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuremonitorlogs-2",
+            "defaultValue": "",
             "type": "String"
         }
     },
@@ -111,7 +111,7 @@
                                 },
                                 "path": "/queryDataV2",
                                 "queries": {
-                                    "subscriptions": "c4139225-5edc-4fe4-a426-f62c934cd8ba",
+                                    "subscriptions": "[subscription().subscriptionId]",
                                     "resourcegroups": "rg-Sentinel",
                                     "resourcetype": "Log Analytics Workspace",
                                     "resourcename": "FedAIRS"
@@ -125,7 +125,7 @@
                     "$connections": {
                         "value": {
                             "azuremonitorlogs-1": {
-                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuremonitorlogs",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
                                 "connectionId": "[parameters('connections_azuremonitorlogs_2_externalid')]",
                                 "connectionName": "azuremonitorlogs-2",
                                 "connectionProperties": {

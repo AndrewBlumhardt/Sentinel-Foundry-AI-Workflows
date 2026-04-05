@@ -11,14 +11,14 @@ Produces an HTML incident summary designed for email or Teams notifications. For
 
 ## Screenshot
 
-![send_incident_to_foundry_ai](../images/send_incident_to_foundry_ai.png)
+<p align="center"><img src="../images/send_incident_to_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_foundry_ai_generated_email_summary%2Ftemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_foundry_ai_generated_email_summary%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
-<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_foundry_ai_generated_email_summary%2Ftemplate.json" target="_blank">
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_foundry_ai_generated_email_summary%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>
 

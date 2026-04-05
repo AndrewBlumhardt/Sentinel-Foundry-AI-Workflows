@@ -12,21 +12,21 @@ This repository is part of a series. The first article, [Building a SOC AI API w
 
 ## Screenshots
 
-![Workflow list](./images/master%20list.png)
+<p align="center"><img src="./images/master%20list.png" width="75%"/></p>
 
 ## Workflows
 
 | Workflow | Purpose | Screenshot | Deploy |
 | --- | --- | --- | --- |
-| [close_low_risk_fp_using_foundry_ai](./close_low_risk_fp_using_foundry_ai/README.md) | Compare incident against historical closure patterns and close if it matches a likely false positive | [image](./images/close_low_risk_fp_using_foundry_ai.png) | [deploy](./close_low_risk_fp_using_foundry_ai/README.md#deploy-to-azure) |
-| [entity_research_using_foundry_ai](./entity_research_using_foundry_ai/README.md) | Retrieve and enrich incident entities; more powerful when combined with external grounding | [image](./images/entity_research_using_foundry_ai.png) | [deploy](./entity_research_using_foundry_ai/README.md#deploy-to-azure) |
-| [get_incident_tasks_from_foundry_ai](./get_incident_tasks_from_foundry_ai/README.md) | Generate up to ten investigation or response tasks and create them on the incident | [image](./images/get_incident_tasks_from_foundry_ai.png) | [deploy](./get_incident_tasks_from_foundry_ai/README.md#deploy-to-azure) |
-| [get_kql_from_foundry_ai](./get_kql_from_foundry_ai/README.md) | Accept a natural language question via webhook and return a generated KQL query | [image](./images/get_kql_from_foundry_ai.png) | [deploy](./get_kql_from_foundry_ai/README.md#deploy-to-azure) |
-| [get_recovery_steps_from_foundry_ai](./get_recovery_steps_from_foundry_ai/README.md) | Accept a question via webhook and return structured recovery or response steps | [image](./images/get_recovery_steps_from_foundry_ai.png) | [deploy](./get_recovery_steps_from_foundry_ai/README.md#deploy-to-azure) |
-| [prioritize_incident_using_foundry_ai](./prioritize_incident_using_foundry_ai/README.md) | Evaluate severity against historical trends, recommend a change, and update the incident | [image](./images/prioritize_incident_using_foundry_ai.png) | [deploy](./prioritize_incident_using_foundry_ai/README.md#deploy-to-azure) |
-| [send_foundry_ai_generated_email_summary](./send_foundry_ai_generated_email_summary/README.md) | Produce an HTML incident summary for email or Teams; requires a messaging connector in production | [image](./images/send_incident_to_foundry_ai.png) | [deploy](./send_foundry_ai_generated_email_summary/README.md#deploy-to-azure) |
-| [send_incident_to_foundry_ai](./send_incident_to_foundry_ai/README.md) | Send incident title, severity, and alerts to the model and add the summary to incident comments | [image](./images/send_incident_to_foundry_ai.png) | [deploy](./send_incident_to_foundry_ai/README.md#deploy-to-azure) |
-| [use_foundry_ai_to_evaluate_pim](./use_foundry_ai_to_evaluate_pim/README.md) | Query Entra ID PIM history daily and generate an HTML summary of unusual patterns | [image](./images/use_foundry_ai_to_evaluate_pim.png) | [deploy](./use_foundry_ai_to_evaluate_pim/README.md#deploy-to-azure) |
+| [close_low_risk_fp_using_foundry_ai](./close_low_risk_fp_using_foundry_ai/README.md) | Compare incident against historical closure patterns and close if it matches a likely false positive | [image](./images/close_low_risk_fp_using_foundry_ai.png) | <a href="./close_low_risk_fp_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [entity_research_using_foundry_ai](./entity_research_using_foundry_ai/README.md) | Retrieve and enrich incident entities; more powerful when combined with external grounding | [image](./images/entity_research_using_foundry_ai.png) | <a href="./entity_research_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [get_incident_tasks_from_foundry_ai](./get_incident_tasks_from_foundry_ai/README.md) | Generate up to ten investigation or response tasks and create them on the incident | [image](./images/get_incident_tasks_from_foundry_ai.png) | <a href="./get_incident_tasks_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [get_kql_from_foundry_ai](./get_kql_from_foundry_ai/README.md) | Accept a natural language question via webhook and return a generated KQL query | [image](./images/get_kql_from_foundry_ai.png) | <a href="./get_kql_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [get_recovery_steps_from_foundry_ai](./get_recovery_steps_from_foundry_ai/README.md) | Accept a question via webhook and return structured recovery or response steps | [image](./images/get_recovery_steps_from_foundry_ai.png) | <a href="./get_recovery_steps_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [prioritize_incident_using_foundry_ai](./prioritize_incident_using_foundry_ai/README.md) | Evaluate severity against historical trends, recommend a change, and update the incident | [image](./images/prioritize_incident_using_foundry_ai.png) | <a href="./prioritize_incident_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [send_foundry_ai_generated_email_summary](./send_foundry_ai_generated_email_summary/README.md) | Produce an HTML incident summary for email or Teams; requires a messaging connector in production | [image](./images/send_incident_to_foundry_ai.png) | <a href="./send_foundry_ai_generated_email_summary/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [send_incident_to_foundry_ai](./send_incident_to_foundry_ai/README.md) | Send incident title, severity, and alerts to the model and add the summary to incident comments | [image](./images/send_incident_to_foundry_ai.png) | <a href="./send_incident_to_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [use_foundry_ai_to_evaluate_pim](./use_foundry_ai_to_evaluate_pim/README.md) | Query Entra ID PIM history daily and generate an HTML summary of unusual patterns | [image](./images/use_foundry_ai_to_evaluate_pim.png) | <a href="./use_foundry_ai_to_evaluate_pim/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ This repository is part of a series. The first article, [Building a SOC AI API w
 
 These workflows call a private Foundry API endpoint using Managed Identity. The [Building a SOC AI API with Azure AI Foundry](https://www.techchat.blog/2026/03/28/building-a-soc-ai-api-with-azure-ai-foundry/) article covers this setup in full detail. The steps below are a quick reference.
 
-![Foundry](./images/Foundry.png)
+<p align="center"><img src="./images/Foundry.png" width="75%"/></p>
 
 If you do not already have a Foundry hub and project, follow these steps.
 

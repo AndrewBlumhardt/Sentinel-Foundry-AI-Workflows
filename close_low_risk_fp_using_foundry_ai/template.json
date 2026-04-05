@@ -7,11 +7,11 @@
             "type": "String"
         },
         "connections_azuresentinel_4_externalid": {
-            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuresentinel-4",
+            "defaultValue": "",
             "type": "String"
         },
         "connections_azuremonitorlogs_1_externalid": {
-            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuremonitorlogs-1",
+            "defaultValue": "",
             "type": "String"
         }
     },
@@ -141,7 +141,7 @@
                                 },
                                 "path": "/queryDataV2",
                                 "queries": {
-                                    "subscriptions": "c4139225-5edc-4fe4-a426-f62c934cd8ba",
+                                    "subscriptions": "[subscription().subscriptionId]",
                                     "resourcegroups": "rg-Sentinel",
                                     "resourcetype": "Log Analytics Workspace",
                                     "resourcename": "FedAIRS"
@@ -194,7 +194,7 @@
                     "$connections": {
                         "value": {
                             "azuresentinel": {
-                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuresentinel",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
                                 "connectionId": "[parameters('connections_azuresentinel_4_externalid')]",
                                 "connectionName": "azuresentinel-4",
                                 "connectionProperties": {
@@ -204,7 +204,7 @@
                                 }
                             },
                             "azuremonitorlogs-1": {
-                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuremonitorlogs",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
                                 "connectionId": "[parameters('connections_azuremonitorlogs_1_externalid')]",
                                 "connectionName": "azuremonitorlogs-1",
                                 "connectionProperties": {

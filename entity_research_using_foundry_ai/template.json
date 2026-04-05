@@ -7,11 +7,11 @@
             "type": "String"
         },
         "connections_azuresentinel_2_externalid": {
-            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuresentinel-2",
+            "defaultValue": "",
             "type": "String"
         },
         "connections_azuresentinel_externalid": {
-            "defaultValue": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/resourceGroups/Logic_App_Store/providers/Microsoft.Web/connections/azuresentinel",
+            "defaultValue": "",
             "type": "String"
         }
     },
@@ -218,7 +218,7 @@
                     "$connections": {
                         "value": {
                             "azuresentinel-2": {
-                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuresentinel",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
                                 "connectionId": "[parameters('connections_azuresentinel_2_externalid')]",
                                 "connectionName": "azuresentinel-2",
                                 "connectionProperties": {
@@ -228,7 +228,7 @@
                                 }
                             },
                             "azuresentinel": {
-                                "id": "/subscriptions/c4139225-5edc-4fe4-a426-f62c934cd8ba/providers/Microsoft.Web/locations/usgovtexas/managedApis/azuresentinel",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
                                 "connectionId": "[parameters('connections_azuresentinel_externalid')]",
                                 "connectionName": "azuresentinel",
                                 "connectionProperties": {
