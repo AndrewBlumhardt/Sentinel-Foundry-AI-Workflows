@@ -6,14 +6,6 @@
             "defaultValue": "prioritize-incident-using-foundry-ai",
             "type": "String"
         },
-        "connections_azuresentinel_3_externalid": {
-            "defaultValue": "",
-            "type": "String"
-        },
-        "connections_azuremonitorlogs_externalid": {
-            "defaultValue": "",
-            "type": "String"
-        },
         "logAnalyticsWorkspaceName": {
             "defaultValue": "",
             "type": "String"
@@ -181,7 +173,7 @@
                         "value": {
                             "azuresentinel-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_3_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel-3",
                                 "connectionProperties": {
                                     "authentication": {
@@ -191,7 +183,7 @@
                             },
                             "azuremonitorlogs": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                "connectionId": "[parameters('connections_azuremonitorlogs_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuremonitorlogs",
                                 "connectionProperties": {
                                     "authentication": {

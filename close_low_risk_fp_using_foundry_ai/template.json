@@ -6,14 +6,6 @@
             "defaultValue": "close-low-risk-fp-using-foundry-ai",
             "type": "String"
         },
-        "connections_azuresentinel_4_externalid": {
-            "defaultValue": "",
-            "type": "String"
-        },
-        "connections_azuremonitorlogs_1_externalid": {
-            "defaultValue": "",
-            "type": "String"
-        },
         "logAnalyticsWorkspaceName": {
             "defaultValue": "",
             "type": "String"
@@ -199,7 +191,7 @@
                         "value": {
                             "azuresentinel": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_4_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel-4",
                                 "connectionProperties": {
                                     "authentication": {
@@ -209,7 +201,7 @@
                             },
                             "azuremonitorlogs-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
-                                "connectionId": "[parameters('connections_azuremonitorlogs_1_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuremonitorlogs-1",
                                 "connectionProperties": {
                                     "authentication": {

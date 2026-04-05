@@ -5,10 +5,6 @@
         "workflows_send_incident_to_foundry_ai_name": {
             "defaultValue": "send-incident-to-foundry-ai",
             "type": "String"
-        },
-        "connections_azuresentinel_externalid": {
-            "defaultValue": "",
-            "type": "String"
         }
     },
     "variables": {},
@@ -110,7 +106,7 @@
                         "value": {
                             "azuresentinel": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel",
                                 "connectionProperties": {
                                     "authentication": {

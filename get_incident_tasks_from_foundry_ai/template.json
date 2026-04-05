@@ -5,10 +5,6 @@
         "workflows_get_incident_tasks_from_foundry_ai_name": {
             "defaultValue": "get-incident-tasks-from-foundry-ai",
             "type": "String"
-        },
-        "connections_azuresentinel_1_externalid": {
-            "defaultValue": "",
-            "type": "String"
         }
     },
     "variables": {},
@@ -137,7 +133,7 @@
                         "value": {
                             "azuresentinel-1": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_1_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel-1",
                                 "connectionProperties": {
                                     "authentication": {

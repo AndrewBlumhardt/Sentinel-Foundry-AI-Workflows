@@ -5,14 +5,6 @@
         "workflows_entity_research_using_foundry_ai_name": {
             "defaultValue": "entity-research-using-foundry-ai",
             "type": "String"
-        },
-        "connections_azuresentinel_2_externalid": {
-            "defaultValue": "",
-            "type": "String"
-        },
-        "connections_azuresentinel_externalid": {
-            "defaultValue": "",
-            "type": "String"
         }
     },
     "variables": {},
@@ -219,7 +211,7 @@
                         "value": {
                             "azuresentinel-2": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_2_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel-2",
                                 "connectionProperties": {
                                     "authentication": {
@@ -229,7 +221,7 @@
                             },
                             "azuresentinel": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
-                                "connectionId": "[parameters('connections_azuresentinel_externalid')]",
+                                    "connectionId": "",
                                 "connectionName": "azuresentinel",
                                 "connectionProperties": {
                                     "authentication": {
