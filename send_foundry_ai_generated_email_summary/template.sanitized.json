@@ -1,0 +1,216 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Log Analytics workspace name"
+      },
+      "defaultValue": "SET-LATER-WORKSPACE-NAME"
+    },
+    "foundryUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Foundry endpoint URI (set after deployment if needed)"
+      },
+      "defaultValue": "SET-LATER-FOUNDRY-URI"
+    },
+    "logicAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Logic App Name"
+      },
+      "defaultValue": "send-foundry-ai-gneerated-email-summary"
+    }
+  },
+  "variables": {
+    "MicrosoftSentinelConnectionName": "[concat('placeholder-delete-MicrosoftSentinel-', parameters('logicAppName'))]",
+    "azuremonitorlogsConnectionName": "[concat('placeholder-delete-azuremonitorlogs-', parameters('logicAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[resourceGroup().location]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "metadata": {
+            "notes": {}
+          },
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "Microsoft_Sentinel_incident": {
+              "type": "ApiConnectionWebhook",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "body": {
+                  "callback_url": "@listCallbackUrl()"
+                },
+                "path": "/incident-creation"
+              },
+              "description": "Standard incident trigger and parser. This takes incident details and parses them into usable parameters. Requires a Sentinel automation rule or manual trigger. To run this manually from Sentinel, you must have the Sentinel Playbook Operator role."
+            }
+          },
+          "actions": {
+            "HTTP_-_Call_Foundry": {
+              "runAfter": {
+                "Run_KQL_Query": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "uri": "[parameters('foundryUri')]",
+                "method": "POST",
+                "body": {
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "You are a cybersecurity incident summarization assistant. Your task is to review the provided incident, related alerts, entities, and supporting context, then produce a concise HTML markdown summary suitable for an email notification. The summary should help the reader quickly understand what happened, why it matters, how urgent it appears, and what response steps should be considered. Do not return JSON. Do not include conversational filler.\n\nReturn clean HTML only. Do not include the word 'html'. Do not include stray or unmatched tags. Ensure all tags are properly opened and closed. Do not begin with closing tags. Output must render correctly in standard email clients.\n\nInclude: a short incident overview, the most important alerts or evidence, a brief severity and priority assessment, and recommended next steps. Mention impacted users, hosts, IPs, tactics, or recurring patterns only when clearly supported by the data.\n\nGuidelines: be concise, clear, and analyst-friendly. Focus on the most important and actionable details. Do not simply restate raw fields. Do not speculate or assume missing facts. If evidence is weak, limited, isolated, or likely benign, state that clearly. If the assigned severity appears misaligned, briefly note that. If no immediate containment or escalation is indicated, say so clearly. Ignore empty inputs unless their absence materially affects interpretation.\n\nOutput format: <h3>Incident Summary</h3><p>...</p><h3>Key Findings</h3><ul><li>...</li></ul><h3>Severity and Priority Assessment</h3><p>...</p><h3>Recommended Next Steps</h3><ul><li>...</li></ul>\n\nKeep the output compact enough for email and preview panes."
+                    },
+                    {
+                      "role": "user",
+                      "content": "Summarize the following incident and related context for email notification use. Incident: @{triggerBody()}  Alerts: @{body('Run_KQL_Query')} Additional context: "
+                    }
+                  ]
+                },
+                "authentication": {
+                  "type": "ManagedServiceIdentity",
+                  "audience": "https://cognitiveservices.azure.us"
+                }
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
+              }
+            },
+            "Wait_for_Details": {
+              "runAfter": {},
+              "type": "Wait",
+              "inputs": {
+                "interval": {
+                  "count": 3,
+                  "unit": "Second"
+                }
+              },
+              "description": "Optional delay recommended for automated trigger, wait for the incident to gather multiple entities. Remove or lower for manual execution. Set to 3 second default for easier testing."
+            },
+            "Run_KQL_Query": {
+              "runAfter": {
+                "Wait_for_Details": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuremonitorlogs']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": {
+                  "query": "let Incident = SecurityIncident | summarize arg_max(TimeGenerated, *) by IncidentNumber | where IncidentNumber == @{triggerBody()?['object']?['properties']?['incidentNumber']} | extend RowType = \"Incident\"; let Alerts = Incident | mv-expand AlertIds | project SystemAlertId = tostring(AlertIds); let S_Alerts = SecurityAlert | summarize arg_max(TimeGenerated, *) by SystemAlertId | where SystemAlertId in (Alerts) | extend RowType = \"SentinelAlert\"; let XDR = AlertInfo | summarize arg_max(TimeGenerated, *) by AlertId | extend AlertId2 = substring(AlertId, 2) | where AlertId2 in (S_Alerts | project tostring(VendorOriginalId)) | join kind=leftouter (AlertEvidence | summarize arg_max(TimeGenerated, *) by AlertId) on AlertId | extend RowType = \"XDRAlert\"; union Incident, S_Alerts, XDR",
+                  "timerangetype": "3"
+                },
+                "path": "/queryDataV2",
+                "queries": {
+                  "subscriptions": "",
+                  "resourcegroups": "",
+                  "resourcetype": "Log Analytics Workspace",
+                  "resourcename": "[parameters('workspaceName')]"
+                }
+              }
+            },
+            "Add_comment_to_incident_-_Simulate_email_or_Teams_message": {
+              "runAfter": {
+                "HTTP_-_Call_Foundry": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": {
+                  "incidentArmId": "@triggerBody()?['object']?['id']",
+                  "message": "<p class=\"editor-paragraph\">@{outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content']}</p>"
+                },
+                "path": "/Incidents/Comment"
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azuresentinel": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]",
+                "connectionName": "[variables('MicrosoftSentinelConnectionName')]"
+              },
+              "azuremonitorlogs": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]",
+                "connectionName": "[variables('azuremonitorlogsConnectionName')]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]",
+        "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('MicrosoftSentinelConnectionName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuresentinel')]",
+        "customParameterValues": {},
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('azuremonitorlogsConnectionName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuremonitorlogs')]",
+        "customParameterValues": {},
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]"
+        }
+      }
+    }
+  ]
+}

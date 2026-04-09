@@ -14,10 +14,10 @@ Sends incident details including title, severity, and related alerts to the Foun
 
 ## Deploy to Azure
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_incident_to_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_incident_to_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
-<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_incident_to_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fsend_incident_to_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>
 
@@ -25,3 +25,4 @@ Sends incident details including title, severity, and related alerts to the Foun
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override template parameters during deployment if your Sentinel connection resource ID differs from the default
+

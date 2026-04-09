@@ -1,0 +1,169 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Log Analytics workspace name"
+      },
+      "defaultValue": "SET-LATER-WORKSPACE-NAME"
+    },
+    "foundryUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Foundry endpoint URI (set after deployment if needed)"
+      },
+      "defaultValue": "SET-LATER-FOUNDRY-URI"
+    },
+    "logicAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Logic App Name"
+      },
+      "defaultValue": "send-incident-to-foundry-ai"
+    }
+  },
+  "variables": {
+    "MicrosoftSentinelConnectionName": "[concat('placeholder-delete-MicrosoftSentinel-', parameters('logicAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[resourceGroup().location]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "metadata": {
+            "notes": {}
+          },
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "Microsoft_Sentinel_incident": {
+              "type": "ApiConnectionWebhook",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "body": {
+                  "callback_url": "@listCallbackUrl()"
+                },
+                "path": "/incident-creation"
+              },
+              "description": "Standard incident trigger and parser. This takes incident details and parses them into usable parameters. Requires a Sentinel automation rule or manual trigger. To run this manually from Sentinel, you must have the Sentinel Playbook Operator role."
+            }
+          },
+          "actions": {
+            "HTTP_-_Call_Foundry": {
+              "runAfter": {
+                "Delay": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "uri": "[parameters('foundryUri')]",
+                "method": "POST",
+                "body": {
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "You are an incident response assistant focused on Microsoft Sentinel, Defender XDR, and Entra ID. You will be provided with an incident name and description. Use only the provided input and do not rewrite or replace it. Provide clear, concise response steps aligned to Microsoft security tooling. Do not use HTML, markdown, bullet symbols, or code formatting. Return a simple numbered list with no more than 10 steps. Each step must be one line and directly actionable. Format exactly as: Question: <original input> Source: <SPO Document - filename.docx OR General Knowledge> Response: <numbered steps>. Never invent a filename."
+                    },
+                    {
+                      "role": "user",
+                      "content": "@{triggerBody()?['object']?['properties']?['title']}, @{triggerBody()?['object']?['properties']?['description']}, @{triggerBody()?['object']?['properties']?['severity']}, @{triggerBody()?['object']?['properties']?['additionalData']?['tactics']}, @{triggerBody()?['object']?['properties']?['relatedEntities']}"
+                    }
+                  ]
+                },
+                "authentication": {
+                  "type": "ManagedServiceIdentity",
+                  "audience": "https://cognitiveservices.azure.us"
+                }
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
+              }
+            },
+            "Add_comment_to_incident_(V3)": {
+              "runAfter": {
+                "HTTP_-_Call_Foundry": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": {
+                  "incidentArmId": "@triggerBody()?['object']?['id']",
+                  "message": "<p class=\"editor-paragraph\">@{outputs('HTTP_-_Call_Foundry')?['body']?['choices']?[0]?['message']?['content']}</p>"
+                },
+                "path": "/Incidents/Comment"
+              }
+            },
+            "Delay": {
+              "runAfter": {},
+              "type": "Wait",
+              "inputs": {
+                "interval": {
+                  "count": 3,
+                  "unit": "Second"
+                }
+              },
+              "description": "Optional delay recommended for automated trigger, wait for the incident to gather multiple entities. Remove or lower for manual execution. Set to 3 second default for easier testing."
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azuresentinel": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]",
+                "connectionName": "[variables('MicrosoftSentinelConnectionName')]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('MicrosoftSentinelConnectionName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuresentinel')]",
+        "customParameterValues": {},
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
+        }
+      }
+    }
+  ]
+}

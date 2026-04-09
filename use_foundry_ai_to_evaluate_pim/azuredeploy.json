@@ -1,0 +1,171 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Log Analytics workspace name"
+      },
+      "defaultValue": "SET-LATER-WORKSPACE-NAME"
+    },
+    "foundryUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Foundry endpoint URI (set after deployment if needed)"
+      },
+      "defaultValue": "SET-LATER-FOUNDRY-URI"
+    },
+    "logicAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Logic App Name"
+      },
+      "defaultValue": "use-foundry-ai-to-evaluate-pim"
+    }
+  },
+  "variables": {
+    "azuremonitorlogsConnectionName": "[concat('placeholder-delete-azuremonitorlogs-', parameters('logicAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('logicAppName')]",
+      "location": "[resourceGroup().location]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "metadata": {
+            "notes": {
+              "EBA58FFC-69E4-4DB2-8659-CA59EE083ED4": {
+                "content": "From here you can send an email, Teams message, create incidents, etc.",
+                "color": "#FFFBCC",
+                "metadata": {
+                  "position": {
+                    "x": 20,
+                    "y": 360
+                  },
+                  "width": 200,
+                  "height": 84
+                }
+              }
+            }
+          },
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "Recurrence": {
+              "recurrence": {
+                "interval": 1,
+                "frequency": "Day"
+              },
+              "evaluatedRecurrence": {
+                "interval": 1,
+                "frequency": "Day"
+              },
+              "type": "Recurrence",
+              "description": "Update the schedule to your desired frequency. Since this logic app does not rely on data input or external triggers, you can also manually run this for testing or faster results. "
+            }
+          },
+          "actions": {
+            "HTTP_-_Call_Foundry": {
+              "runAfter": {
+                "Run_KQL_Query": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "uri": "[parameters('foundryUri')]",
+                "method": "POST",
+                "body": {
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "You are a cybersecurity behavioral analysis assistant focused on reviewing Privileged Identity Management (PIM) role activation request activity for administrative users. Your task is to identify unusual or potentially suspicious patterns in PIM request behavior for a single user and produce a concise HTML summary suitable for an email notification. Return clean HTML only. Do not include the word 'html'. Do not include stray or unmatched tags. Ensure all tags are properly opened and closed. Output must render correctly in standard email clients. You will be provided recent PIM requests along with a 90-day historical baseline for the same user. Each request includes TimeGenerated, Identity, UPN, Role, Category, Comment, Source_IP, and Result. Analyze the user's recent activity in the context of their historical behavior. Focus only on notable or potentially suspicious activity. Do not list normal or repetitive patterns unless needed for comparison. Identify deviations such as unusual timing, new or rare roles, changes in comment wording or structure, inconsistent comment length, vague or inappropriate justifications, or new/unusual source IP patterns. Consider that comments may be absent for some request types such as group-based PIM and should not be treated as suspicious by default. Consider role and scope sensitivity. Weak or unusual justifications tied to high privilege roles are more significant than similar behavior on low-impact roles. Treat valid IPv4 and IPv6 addresses as meaningful signals, but ignore GUID-like values or missing IPs. Use historical data to identify repeated phrases, normal comment patterns, common roles, and typical request behavior. Only include findings where there is a clear deviation from the user's baseline or where role sensitivity increases concern. Avoid weak or speculative observations. If grounding or organizational guidance is provided, incorporate it into the evaluation. If recent activity aligns with historical norms and no notable issues are identified, clearly state that no suspicious or unusual behavior was observed. Output format: <h3>PIM Activity Summary</h3><p>...</p><h3>Notable Observations</h3><ul><li>...</li></ul><h3>Risk Assessment</h3><p>...</p><h3>Recommended Actions</h3><ul><li>...</li></ul> Keep the output concise, analyst-focused, and suitable for email delivery."
+                    },
+                    {
+                      "role": "user",
+                      "content": "Analyze the following PIM activity. Recent requests:  Historical 90-day baseline: @{body('Run_KQL_Query')} Grounding (if available): "
+                    }
+                  ]
+                },
+                "authentication": {
+                  "type": "ManagedServiceIdentity",
+                  "audience": "https://cognitiveservices.azure.us"
+                }
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
+              }
+            },
+            "Run_KQL_Query": {
+              "runAfter": {},
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuremonitorlogs']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": {
+                  "query": "let PIMBase =\n    AuditLogs\n    | where TimeGenerated > ago(720d)\n    | where OperationName contains \"requested (PIM activation)\"\n    | where Result == \"success\"\n    | extend UPN = tostring(InitiatedBy.user.userPrincipalName)\n    | extend Role0 = tostring(TargetResources[0].displayName)\n    | extend Role1 = tostring(TargetResources[1].displayName)\n    | extend Role3 = tostring(TargetResources[3].displayName)\n    | mv-expand AD = AdditionalDetails\n    | extend ADKey = tostring(AD.key), ADValue = tostring(AD.value)\n    | summarize\n        CommentFromDetails = anyif(ADValue, ADKey =~ \"Justification\"),\n        Source_IP = anyif(ADValue, ADKey =~ \"ipaddr\")\n        by TimeGenerated, Identity, UPN, Category, Result, OperationName, ResultDescription, Role0, Role1, Role3\n    | extend Comment = iff(Category == \"GroupManagement\", ResultDescription, CommentFromDetails)\n    | extend Role = case(\n        Category == \"GroupManagement\" and isnotempty(Role1), Role1,\n        Role0 == \"Member\" and isnotempty(Role3), Role3,\n        isnotempty(Role1) and isempty(Role0), Role1,\n        Role0\n    )\n    | where isnotempty(UPN)\n    | project TimeGenerated, Identity, UPN, Role, Category, Comment, Source_IP, Result;\nlet PIMHistory90d =\n    PIMBase\n    | where TimeGenerated between (ago(90d) .. ago(24h))\n    | summarize\n        HistoricalRequestCount = count(),\n        HistoricalRequests = make_list(\n            bag_pack(\n                \"TimeGenerated\", TimeGenerated,\n                \"Identity\", Identity,\n                \"UPN\", UPN,\n                \"Role\", Role,\n                \"Category\", Category,\n                \"Comment\", Comment,\n                \"Source_IP\", Source_IP,\n                \"Result\", Result\n            ),\n            1000\n        )\n    by UPN;\nlet RecentPIM24h =\n    PIMBase\n    | where TimeGenerated >= ago(24h)\n    | summarize\n        RecentRequestCount = count(),\n        MostRecentRequest = max(TimeGenerated),\n        RecentRequests = make_list(\n            bag_pack(\n                \"TimeGenerated\", TimeGenerated,\n                \"Identity\", Identity,\n                \"UPN\", UPN,\n                \"Role\", Role,\n                \"Category\", Category,\n                \"Comment\", Comment,\n                \"Source_IP\", Source_IP,\n                \"Result\", Result\n            ),\n            100\n        )\n    by UPN;\nRecentPIM24h\n| join kind=leftouter PIMHistory90d on UPN\n| project\n    UPN,\n    MostRecentRequest,\n    RecentRequestCount,\n    RecentRequests,\n    HistoricalRequestCount = coalesce(HistoricalRequestCount, 0),\n    HistoricalRequests\n| order by MostRecentRequest desc",
+                  "timerangetype": "3"
+                },
+                "path": "/queryDataV2",
+                "queries": {
+                  "subscriptions": "",
+                  "resourcegroups": "",
+                  "resourcetype": "Log Analytics Workspace",
+                  "resourcename": "[parameters('workspaceName')]"
+                }
+              },
+              "description": "Query Sentinel for a list of all recent PIM users and their PIM history. Rather than review PIM history for all admin users, which would likely be too much for larger tentnats, this narrows the focus on those in the last 24 hours."
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azuremonitorlogs": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]",
+                "connectionName": "[variables('azuremonitorlogsConnectionName')]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('azuremonitorlogsConnectionName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuremonitorlogs')]",
+        "customParameterValues": {},
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]"
+        }
+      }
+    }
+  ]
+}

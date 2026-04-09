@@ -13,10 +13,10 @@ Accepts a question via webhook, typically triggered from a Sentinel workbook, an
 
 ## Deploy to Azure
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fget_recovery_steps_from_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fget_recovery_steps_from_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
-<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fget_recovery_steps_from_foundry_ai%2Ftemplate.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fget_recovery_steps_from_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>
 
@@ -24,3 +24,4 @@ Accepts a question via webhook, typically triggered from a Sentinel workbook, an
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - After deployment, copy the generated HTTP callback URL into the workbook or caller that will invoke the workflow
+
