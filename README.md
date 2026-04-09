@@ -14,19 +14,19 @@ This repository is part of a series. The first article, [Building a SOC AI API w
 
 <p align="center"><img src="./images/master%20list.png" width="75%"/></p>
 
-## Workflows
+## Playbooks
 
-| Workflow | Purpose | Screenshot | Deploy |
+| Playbook | Purpose | Screenshot | Deploy |
 | --- | --- | --- | --- |
-| [close_low_risk_fp_using_foundry_ai](./close_low_risk_fp_using_foundry_ai/README.md) | Compare incident against historical closure patterns and close if it matches a likely false positive | [image](./images/close_low_risk_fp_using_foundry_ai.png) | <a href="./close_low_risk_fp_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [entity_research_using_foundry_ai](./entity_research_using_foundry_ai/README.md) | Retrieve and enrich incident entities; more powerful when combined with external grounding | [image](./images/entity_research_using_foundry_ai.png) | <a href="./entity_research_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [get_incident_tasks_from_foundry_ai](./get_incident_tasks_from_foundry_ai/README.md) | Generate up to ten investigation or response tasks and create them on the incident | [image](./images/get_incident_tasks_from_foundry_ai.png) | <a href="./get_incident_tasks_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [get_kql_from_foundry_ai](./get_kql_from_foundry_ai/README.md) | Accept a natural language question via webhook and return a generated KQL query | [image](./images/get_kql_from_foundry_ai.png) | <a href="./get_kql_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [get_recovery_steps_from_foundry_ai](./get_recovery_steps_from_foundry_ai/README.md) | Accept a question via webhook and return structured recovery or response steps | [image](./images/get_recovery_steps_from_foundry_ai.png) | <a href="./get_recovery_steps_from_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [prioritize_incident_using_foundry_ai](./prioritize_incident_using_foundry_ai/README.md) | Evaluate severity against historical trends, recommend a change, and update the incident | [image](./images/prioritize_incident_using_foundry_ai.png) | <a href="./prioritize_incident_using_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [send_foundry_ai_generated_email_summary](./send_foundry_ai_generated_email_summary/README.md) | Produce an HTML incident summary for email or Teams; requires a messaging connector in production | [image](./images/send_incident_to_foundry_ai.png) | <a href="./send_foundry_ai_generated_email_summary/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [send_incident_to_foundry_ai](./send_incident_to_foundry_ai/README.md) | Send incident title, severity, and alerts to the model and add the summary to incident comments | [image](./images/send_incident_to_foundry_ai.png) | <a href="./send_incident_to_foundry_ai/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
-| [use_foundry_ai_to_evaluate_pim](./use_foundry_ai_to_evaluate_pim/README.md) | Query Entra ID PIM history daily and generate an HTML summary of unusual patterns | [image](./images/use_foundry_ai_to_evaluate_pim.png) | <a href="./use_foundry_ai_to_evaluate_pim/README.md#deploy-to-azure" target="_blank" rel="noopener noreferrer">deploy</a> |
+| [close_low_risk_fp_using_foundry_ai](./playbooks/close_low_risk_fp_using_foundry_ai/README.md) | Compare incident against historical closure patterns and close if it matches a likely false positive | [image](./images/close_low_risk_fp_using_foundry_ai.png) | <a href="./playbooks/close_low_risk_fp_using_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [entity_research_using_foundry_ai](./playbooks/entity_research_using_foundry_ai/README.md) | Retrieve and enrich incident entities; more powerful when combined with external grounding | [image](./images/entity_research_using_foundry_ai.png) | <a href="./playbooks/entity_research_using_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [get_incident_tasks_from_foundry_ai](./playbooks/get_incident_tasks_from_foundry_ai/README.md) | Generate up to ten investigation or response tasks and create them on the incident | [image](./images/get_incident_tasks_from_foundry_ai.png) | <a href="./playbooks/get_incident_tasks_from_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [get_kql_from_foundry_ai](./playbooks/get_kql_from_foundry_ai/README.md) | Accept a natural language question via webhook and return a generated KQL query | [image](./images/get_kql_from_foundry_ai.png) | <a href="./playbooks/get_kql_from_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [get_recovery_steps_from_foundry_ai](./playbooks/get_recovery_steps_from_foundry_ai/README.md) | Accept a question via webhook and return structured recovery or response steps | [image](./images/get_recovery_steps_from_foundry_ai.png) | <a href="./playbooks/get_recovery_steps_from_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [prioritize_incident_using_foundry_ai](./playbooks/prioritize_incident_using_foundry_ai/README.md) | Evaluate severity against historical trends, recommend a change, and update the incident | [image](./images/prioritize_incident_using_foundry_ai.png) | <a href="./playbooks/prioritize_incident_using_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [send_foundry_ai_generated_email_summary](./playbooks/send_foundry_ai_generated_email_summary/README.md) | Produce an HTML incident summary for email or Teams; requires a messaging connector in production | [image](./images/send_incident_to_foundry_ai.png) | <a href="./playbooks/send_foundry_ai_generated_email_summary/README.md#deploy-to-azure">deploy</a> |
+| [send_incident_to_foundry_ai](./playbooks/send_incident_to_foundry_ai/README.md) | Send incident title, severity, and alerts to the model and add the summary to incident comments | [image](./images/send_incident_to_foundry_ai.png) | <a href="./playbooks/send_incident_to_foundry_ai/README.md#deploy-to-azure">deploy</a> |
+| [use_foundry_ai_to_evaluate_pim](./playbooks/use_foundry_ai_to_evaluate_pim/README.md) | Query Entra ID PIM history daily and generate an HTML summary of unusual patterns | [image](./images/use_foundry_ai_to_evaluate_pim.png) | <a href="./playbooks/use_foundry_ai_to_evaluate_pim/README.md#deploy-to-azure">deploy</a> |
 
 ## Prerequisites
 
@@ -81,38 +81,61 @@ The Logic App Managed Identity requires the following role assignments before wo
 
 ## Deployment
 
-Each workflow folder includes Deploy to Azure buttons in the same style used by Microsoft Sentinel playbook READMEs.
+### Deploy to Azure (portal)
 
-If you prefer CLI or PowerShell instead of the portal button, use the helper scripts in the repo root.
+Each playbook folder has **Deploy to Azure** and **Deploy to Azure Government** buttons in its own README. Click the link in the Deploy column of the table above to go to the playbook README and use those buttons.
 
-PowerShell:
+### Deploy all playbooks at once (PowerShell)
 
-```powershell
-.\deploy.ps1 -WorkflowFolder close_low_risk_fp_using_foundry_ai -ResourceGroup <resource-group>
-```
+Download the repo and run one of the deploy-all scripts from the repo root. Both scripts prompt for required values if parameters are not supplied on the command line.
 
-Bash:
+**Prerequisites:**
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed
+- PowerShell 7+
+- Sign in: `az login` (or `az cloud set --name AzureUSGovernment && az login` for government)
+- Contributor rights on the target resource group
 
-```bash
-./deploy.sh close_low_risk_fp_using_foundry_ai <resource-group>
-```
-
-Override template parameters at deployment time when your environment differs from the embedded defaults.
-
-PowerShell example:
+**Azure commercial:**
 
 ```powershell
-.\deploy.ps1 \
-  -WorkflowFolder close_low_risk_fp_using_foundry_ai \
-  -ResourceGroup <resource-group> \
-  -Parameters @(
-    "workflows_close_low_risk_fp_using_foundry_ai_name=my-workflow-name",
-    "connections_azuresentinel_4_externalid=/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Web/connections/azuresentinel-4",
-    "connections_azuremonitorlogs_1_externalid=/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Web/connections/azuremonitorlogs-1"
-  )
+.\Deploy-All.ps1 `
+  -ResourceGroup     <resource-group-name> `
+  -WorkspaceName     <log-analytics-workspace-name> `
+  -FoundryUri        <foundry-endpoint-uri>
 ```
+
+**Azure Government:**
+
+```powershell
+az cloud set --name AzureUSGovernment
+az login
+
+.\Deploy-All-Gov.ps1 `
+  -ResourceGroup     <resource-group-name> `
+  -WorkspaceName     <log-analytics-workspace-name> `
+  -FoundryUri        <foundry-endpoint-uri>
+```
+
+Each script deploys all nine playbooks sequentially and prints a summary table on completion. Failed deployments are flagged and the script exits with a non-zero code.
+
+### Post-deployment steps
+
+After deployment, each Logic App will have two placeholder connector resources in the resource group named `placeholder-delete-*`. These must be replaced with authorized connections before the playbooks will run:
+
+1. Open the Logic App in the Azure portal
+2. Go to **Logic app designer**
+3. Expand any action that shows a connection error and re-authenticate using Managed Identity
+4. Save the Logic App
+5. Delete the `placeholder-delete-*` connections once all playbooks are wired up
+
+Assign the following roles to each Logic App system-assigned managed identity:
+
+| Role | Scope |
+| --- | --- |
+| Microsoft Sentinel Responder | Sentinel workspace |
+| Cognitive Services User | Foundry resource |
 
 ## Notes
 
-- The embedded template defaults reference Azure Government endpoints and connection resource IDs - override these at deploy time for commercial Azure
-- Some workflows still need runtime hardening before production use
+- Templates deploy placeholder connection stubs following the Sentinel community playbook pattern. Connectors must be authorized post-deploy.
+- Some workflows still need runtime hardening before production use.

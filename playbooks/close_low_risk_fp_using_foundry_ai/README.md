@@ -15,10 +15,10 @@ Compares a Sentinel incident against historical closure patterns and recommends 
 
 ## Deploy to Azure
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fclose_low_risk_fp_using_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fplaybooks%2Fclose_low_risk_fp_using_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
-<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fclose_low_risk_fp_using_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAndrewBlumhardt%2FSentinel-Foundry-AI-Workflows%2Fmain%2Fplaybooks%2Fclose_low_risk_fp_using_foundry_ai%2Fazuredeploy.json" target="_blank" rel="noopener noreferrer">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>
 
@@ -27,4 +27,5 @@ Compares a Sentinel incident against historical closure patterns and recommends 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override connection resource IDs during deployment if they differ from the exported defaults
 - This workflow uses both Sentinel incident data and Azure Monitor history
+
 
