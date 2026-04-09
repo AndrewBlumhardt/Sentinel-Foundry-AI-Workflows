@@ -61,6 +61,15 @@ if ($LASTEXITCODE -ne 0) {
     throw "Azure CLI is not available. Install Azure CLI and rerun."
 }
 
+$currentCloud = (az cloud show --query name -o tsv 2>$null)
+if ($currentCloud -ne 'AzureCloud') {
+    Write-Host "NOTE: Azure CLI is currently set to '$currentCloud'. Switching to AzureCloud for commercial deployment." -ForegroundColor Yellow
+    az cloud set --name AzureCloud
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to switch Azure CLI to AzureCloud."
+    }
+}
+
 $accountJson = az account show -o json 2>$null
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($accountJson)) {
     throw "Not logged in to Azure CLI. Run 'az login' and rerun the script."
