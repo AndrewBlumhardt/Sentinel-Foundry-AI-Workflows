@@ -1,11 +1,14 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Deploys all Sentinel Foundry AI playbooks to an Azure commercial resource group.
+    Deploys all Sentinel Foundry AI playbooks to an Azure resource group.
 
 .DESCRIPTION
     Deploys the repository playbook templates from GitHub using Azure CLI
     template-uri. Prompts for required values if not supplied as parameters.
+
+    Use -Government to target Azure Government (AzureUSGovernment). Omit it
+    for Azure commercial (AzureCloud).
 
     Prerequisites:
       - Azure CLI installed and signed in: az login
@@ -13,7 +16,12 @@
       - Contributor (or equivalent) rights on the target resource group
 
 .EXAMPLE
+    # Azure commercial
     .\Deploy-All.ps1 -ResourceGroup MyRG -WorkspaceName my-sentinel-ws -FoundryUri https://my-foundry.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview
+
+.EXAMPLE
+    # Azure Government
+    .\Deploy-All.ps1 -Government -ResourceGroup MyRG -WorkspaceName my-sentinel-ws -FoundryUri https://my-foundry.openai.azure.us/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview
 
 .EXAMPLE
     .\Deploy-All.ps1  # prompts for all required values interactively
@@ -30,10 +38,16 @@ param(
     [string]$FoundryUri,
 
     [Parameter(Mandatory = $false)]
-    [string]$Subscription
+    [string]$Subscription,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Government
 )
 
 $ErrorActionPreference = 'Stop'
+
+$targetCloud = if ($Government) { 'AzureUSGovernment' } else { 'AzureCloud' }
+$cloudLabel  = if ($Government) { 'Azure Government' } else { 'Azure Commercial' }
 
 $repoOwner = 'AndrewBlumhardt'
 $repoName = 'Sentinel-Foundry-AI-Workflows'
@@ -55,26 +69,30 @@ if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
 if (-not $Subscription)   { $Subscription   = Read-Host "Subscription name or ID (leave blank for current default)" }
 
-# Preflight: validate Azure CLI login and subscription context.
+# Preflight: validate Azure CLI is available.
 $null = az --version 2>$null
 if ($LASTEXITCODE -ne 0) {
     throw "Azure CLI is not available. Install Azure CLI and rerun."
 }
 
+# Ensure CLI is targeting the correct cloud.
 $currentCloud = (az cloud show --query name -o tsv 2>$null)
-if ($currentCloud -ne 'AzureCloud') {
-    Write-Host "NOTE: Azure CLI is currently set to '$currentCloud'. Switching to AzureCloud for commercial deployment." -ForegroundColor Yellow
-    az cloud set --name AzureCloud
+if ($currentCloud -ne $targetCloud) {
+    Write-Host "Switching Azure CLI from '$currentCloud' to '$targetCloud'." -ForegroundColor Yellow
+    az cloud set --name $targetCloud
     if ($LASTEXITCODE -ne 0) {
-        throw "Failed to switch Azure CLI to AzureCloud."
+        throw "Failed to switch Azure CLI to $targetCloud."
     }
 }
 
+# Validate login.
 $accountJson = az account show -o json 2>$null
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($accountJson)) {
-    throw "Not logged in to Azure CLI. Run 'az login' and rerun the script."
+    $loginHint = if ($Government) { "az login --environment AzureUSGovernment" } else { "az login" }
+    throw "Not logged in to Azure CLI. Run '$loginHint' and rerun the script."
 }
 
+# Switch subscription if specified.
 if (-not [string]::IsNullOrWhiteSpace($Subscription)) {
     az account set --subscription $Subscription
     if ($LASTEXITCODE -ne 0) {
@@ -84,8 +102,9 @@ if (-not [string]::IsNullOrWhiteSpace($Subscription)) {
 }
 
 $account = $accountJson | ConvertFrom-Json
-Write-Host "Using Azure subscription: $($account.name) ($($account.id))" -ForegroundColor DarkCyan
+Write-Host "Cloud: $cloudLabel | Subscription: $($account.name) ($($account.id))" -ForegroundColor DarkCyan
 
+# Validate resource group exists.
 $rgExists = az group exists --name $ResourceGroup -o tsv 2>$null
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to verify resource group '$ResourceGroup' in subscription $($account.id)."
@@ -97,7 +116,7 @@ if ($rgExists -ne 'true') {
 
 $playbooks = $playbookNames | ForEach-Object { [pscustomobject]@{ Name = $_ } }
 
-Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup" -ForegroundColor Cyan
+Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup ($cloudLabel)" -ForegroundColor Cyan
 
 $results = [System.Collections.Generic.List[pscustomobject]]::new()
 
