@@ -37,6 +37,8 @@ Copy this from the deployed model endpoint or code sample page. Do not use the F
 7. Replace `"url":""` with the HTTP POST URL from the associated Logic App trigger.
 8. Save the workbook.
 
+<p align="center"><img src="../images/Get%20Your%20Webhook%20URL.png" width="75%"/></p>
+
 Example JSON fragment:
 
 ```json
@@ -81,7 +83,7 @@ Use it when you want a fast response recommendation for an analyst question with
 
 Associated playbook: [playbooks/get_recovery_steps_from_foundry_ai/README.md](../playbooks/get_recovery_steps_from_foundry_ai/README.md)
 
-<p align="center"><img src="../images/get_recovery_steps_from_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../images/Incident%20Response%20Assistant.png" width="75%"/></p>
 
 Notes:
 
@@ -99,7 +101,7 @@ Use it when analysts know what they want to investigate but do not want to hand-
 
 Associated playbook: [playbooks/get_kql_from_foundry_ai/README.md](../playbooks/get_kql_from_foundry_ai/README.md)
 
-<p align="center"><img src="../images/get_kql_from_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../images/KQL%20Query%20Assistant.png" width="75%"/></p>
 
 Notes:
 
