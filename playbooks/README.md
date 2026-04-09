@@ -12,6 +12,8 @@ This folder contains the individual Logic App playbooks in this repository along
 
 Run these scripts from the repo root or from this folder.
 
+If you prefer individual deployment, use the **Deploy to Azure** or **Deploy to Azure Government** button in each playbook folder README.
+
 ### Azure Commercial
 
 ```powershell

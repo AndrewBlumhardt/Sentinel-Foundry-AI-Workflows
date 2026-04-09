@@ -32,7 +32,7 @@ Copy this from the deployed model endpoint or code sample page. Do not use the F
 2. Go to **Workbooks**.
 3. Select **New**.
 4. Open **Advanced Editor**.
-5. Paste the contents of the workbook JSON file from this folder.
+5. Paste the contents of the workbook JSON file from the `workbooks` folder in this repo.
 6. Find the lowest block that contains `"version":"CustomEndpoint/1.0"`.
 7. Replace `"url":""` with the HTTP POST URL from the associated Logic App trigger.
 8. Save the workbook.
