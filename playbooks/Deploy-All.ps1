@@ -4,9 +4,9 @@
     Deploys all Sentinel Foundry AI playbooks to an Azure commercial resource group.
 
 .DESCRIPTION
-    Downloads and runs locally. Iterates every playbook folder under ./playbooks/ and
-    deploys its azuredeploy.json using the Azure CLI. Prompts for required values if
-    not supplied as parameters.
+    Iterates every playbook folder under the current directory and deploys its
+    azuredeploy.json using the Azure CLI. Prompts for required values if not
+    supplied as parameters.
 
     Prerequisites:
       - Azure CLI installed and signed in: az login
@@ -39,11 +39,7 @@ if (-not $ResourceGroup)  { $ResourceGroup  = Read-Host "Resource group name" }
 if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace name" }
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
 
-$playbooksRoot = Join-Path $PSScriptRoot 'playbooks'
-if (-not (Test-Path $playbooksRoot)) {
-    throw "playbooks/ folder not found next to this script. Run from the repo root."
-}
-
+$playbooksRoot = $PSScriptRoot
 $playbooks = Get-ChildItem -Path $playbooksRoot -Directory | Sort-Object Name
 
 Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup" -ForegroundColor Cyan
@@ -78,7 +74,6 @@ foreach ($pb in $playbooks) {
 
     if ($WhatIf) { $azArgs += '--what-if' }
 
-    $exitCode = 0
     & az @azArgs
     $exitCode = $LASTEXITCODE
 

@@ -4,8 +4,8 @@
     Deploys all Sentinel Foundry AI playbooks to an Azure Government resource group.
 
 .DESCRIPTION
-    Downloads and runs locally. Iterates every playbook folder under ./playbooks/ and
-    deploys its azuredeploy.json using the Azure CLI targeting the AzureUSGovernment cloud.
+    Iterates every playbook folder under the current directory and deploys its
+    azuredeploy.json using the Azure CLI targeting the AzureUSGovernment cloud.
     Prompts for required values if not supplied as parameters.
 
     Prerequisites:
@@ -37,7 +37,6 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# Verify CLI is targeting Azure Government
 $currentCloud = (az cloud show --query name -o tsv 2>$null)
 if ($currentCloud -ne 'AzureUSGovernment') {
     Write-Host "WARNING: Azure CLI is currently set to '$currentCloud', not AzureUSGovernment." -ForegroundColor Yellow
@@ -50,11 +49,7 @@ if (-not $ResourceGroup)  { $ResourceGroup  = Read-Host "Resource group name" }
 if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace name" }
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
 
-$playbooksRoot = Join-Path $PSScriptRoot 'playbooks'
-if (-not (Test-Path $playbooksRoot)) {
-    throw "playbooks/ folder not found next to this script. Run from the repo root."
-}
-
+$playbooksRoot = $PSScriptRoot
 $playbooks = Get-ChildItem -Path $playbooksRoot -Directory | Sort-Object Name
 
 Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup (Azure Government)" -ForegroundColor Cyan
@@ -89,7 +84,6 @@ foreach ($pb in $playbooks) {
 
     if ($WhatIf) { $azArgs += '--what-if' }
 
-    $exitCode = 0
     & az @azArgs
     $exitCode = $LASTEXITCODE
 
