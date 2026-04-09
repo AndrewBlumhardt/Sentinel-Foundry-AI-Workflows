@@ -30,7 +30,10 @@ param(
     [string]$WorkspaceName,
 
     [Parameter(Mandatory = $false)]
-    [string]$FoundryUri
+    [string]$FoundryUri,
+
+    [Parameter(Mandatory = $false)]
+    [string]$Subscription
 )
 
 $ErrorActionPreference = 'Stop'
@@ -61,6 +64,38 @@ if ($currentCloud -ne 'AzureUSGovernment') {
 if (-not $ResourceGroup)  { $ResourceGroup  = Read-Host "Resource group name" }
 if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace name" }
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
+if (-not $Subscription)   { $Subscription   = Read-Host "Subscription name or ID (leave blank for current default)" }
+
+# Preflight: validate Azure CLI login and subscription context.
+$null = az --version 2>$null
+if ($LASTEXITCODE -ne 0) {
+    throw "Azure CLI is not available. Install Azure CLI and rerun."
+}
+
+$accountJson = az account show -o json 2>$null
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($accountJson)) {
+    throw "Not logged in to Azure CLI. Run 'az login --environment AzureUSGovernment' and rerun the script."
+}
+
+if (-not [string]::IsNullOrWhiteSpace($Subscription)) {
+    az account set --subscription $Subscription
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to select subscription '$Subscription'. Verify the name/ID and your access."
+    }
+    $accountJson = az account show -o json
+}
+
+$account = $accountJson | ConvertFrom-Json
+Write-Host "Using Azure subscription: $($account.name) ($($account.id))" -ForegroundColor DarkCyan
+
+$rgExists = az group exists --name $ResourceGroup -o tsv 2>$null
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to verify resource group '$ResourceGroup' in subscription $($account.id)."
+}
+
+if ($rgExists -ne 'true') {
+    throw "Resource group '$ResourceGroup' was not found in subscription '$($account.name)' ($($account.id)). Select the correct subscription with -Subscription or create the resource group first."
+}
 
 $playbooks = $playbookNames | ForEach-Object { [pscustomobject]@{ Name = $_ } }
 
