@@ -4,9 +4,8 @@
     Deploys all Sentinel Foundry AI playbooks to an Azure commercial resource group.
 
 .DESCRIPTION
-    Iterates every playbook folder under the current directory and deploys its
-    azuredeploy.json using the Azure CLI. Prompts for required values if not
-    supplied as parameters.
+    Deploys the repository playbook templates from GitHub using Azure CLI
+    template-uri. Prompts for required values if not supplied as parameters.
 
     Prerequisites:
       - Azure CLI installed and signed in: az login
@@ -33,25 +32,33 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+$repoOwner = 'AndrewBlumhardt'
+$repoName = 'Sentinel-Foundry-AI-Workflows'
+$repoBranch = 'main'
+$playbookNames = @(
+    'close_low_risk_fp_using_foundry_ai',
+    'entity_research_using_foundry_ai',
+    'get_incident_tasks_from_foundry_ai',
+    'get_kql_from_foundry_ai',
+    'get_recovery_steps_from_foundry_ai',
+    'prioritize_incident_using_foundry_ai',
+    'send_foundry_ai_generated_email_summary',
+    'send_incident_to_foundry_ai',
+    'use_foundry_ai_to_evaluate_pim'
+)
+
 if (-not $ResourceGroup)  { $ResourceGroup  = Read-Host "Resource group name" }
 if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace name" }
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
 
-$playbooksRoot = $PSScriptRoot
-$playbooks = Get-ChildItem -Path $playbooksRoot -Directory |
-    Where-Object { Test-Path (Join-Path $_.FullName 'azuredeploy.json') } |
-    Sort-Object Name
-
-if (-not $playbooks -or $playbooks.Count -eq 0) {
-    throw "No playbook folders with azuredeploy.json were found under: $playbooksRoot. Run this script from the repository playbooks folder, or use .\\playbooks\\Deploy-All.ps1 from the repo root."
-}
+$playbooks = $playbookNames | ForEach-Object { [pscustomobject]@{ Name = $_ } }
 
 Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup" -ForegroundColor Cyan
 
 $results = [System.Collections.Generic.List[pscustomobject]]::new()
 
 foreach ($pb in $playbooks) {
-    $template = Join-Path $pb.FullName 'azuredeploy.json'
+    $templateUri = "https://raw.githubusercontent.com/$repoOwner/$repoName/$repoBranch/playbooks/$($pb.Name)/azuredeploy.json"
 
     $timestamp   = Get-Date -Format 'yyyyMMddHHmmss'
     $safeName    = $pb.Name -replace '[^A-Za-z0-9-]', '-'
@@ -64,12 +71,13 @@ foreach ($pb in $playbooks) {
         'deployment', 'group', 'create',
         '--resource-group', $ResourceGroup,
         '--name', $deployName,
-        '--template-file', $template,
         '--parameters',
             "logicAppName=$logicName",
             "workspaceName=$WorkspaceName",
             "foundryUri=$FoundryUri"
     )
+
+    $azArgs += @('--template-uri', $templateUri)
 
     if ($WhatIfPreference) { $azArgs += '--what-if' }
 
