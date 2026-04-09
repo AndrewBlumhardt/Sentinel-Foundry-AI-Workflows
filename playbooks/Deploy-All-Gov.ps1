@@ -48,7 +48,13 @@ if (-not $WorkspaceName)  { $WorkspaceName  = Read-Host "Log Analytics workspace
 if (-not $FoundryUri)     { $FoundryUri     = Read-Host "Foundry endpoint URI" }
 
 $playbooksRoot = $PSScriptRoot
-$playbooks = Get-ChildItem -Path $playbooksRoot -Directory | Sort-Object Name
+$playbooks = Get-ChildItem -Path $playbooksRoot -Directory |
+    Where-Object { Test-Path (Join-Path $_.FullName 'azuredeploy.json') } |
+    Sort-Object Name
+
+if (-not $playbooks -or $playbooks.Count -eq 0) {
+    throw "No playbook folders with azuredeploy.json were found under: $playbooksRoot. Run this script from the repository playbooks folder, or use .\\playbooks\\Deploy-All-Gov.ps1 from the repo root."
+}
 
 Write-Host "`nDeploying $($playbooks.Count) playbooks to resource group: $ResourceGroup (Azure Government)" -ForegroundColor Cyan
 
@@ -56,11 +62,6 @@ $results = [System.Collections.Generic.List[pscustomobject]]::new()
 
 foreach ($pb in $playbooks) {
     $template = Join-Path $pb.FullName 'azuredeploy.json'
-    if (-not (Test-Path $template)) {
-        Write-Host "[SKIP] $($pb.Name) - azuredeploy.json not found" -ForegroundColor Yellow
-        $results.Add([pscustomobject]@{ Playbook = $pb.Name; Status = 'Skipped' })
-        continue
-    }
 
     $timestamp   = Get-Date -Format 'yyyyMMddHHmmss'
     $safeName    = $pb.Name -replace '[^A-Za-z0-9-]', '-'
