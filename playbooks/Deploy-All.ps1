@@ -28,9 +28,7 @@ param(
     [string]$WorkspaceName,
 
     [Parameter(Mandatory = $false)]
-    [string]$FoundryUri,
-
-    [switch]$WhatIf
+    [string]$FoundryUri
 )
 
 $ErrorActionPreference = 'Stop'
@@ -72,7 +70,7 @@ foreach ($pb in $playbooks) {
             "foundryUri=$FoundryUri"
     )
 
-    if ($WhatIf) { $azArgs += '--what-if' }
+    if ($WhatIfPreference) { $azArgs += '--what-if' }
 
     & az @azArgs
     $exitCode = $LASTEXITCODE
