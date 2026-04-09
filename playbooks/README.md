@@ -29,6 +29,8 @@ az account set --subscription "<subscription name or ID>"
 
 The script prints the active cloud and subscription before deploying so you can confirm it is targeting the correct environment.
 
+All playbooks default the HTTP managed identity audience to https://cognitiveservices.azure.com for Foundry/OpenAI calls.
+
 ### Azure Commercial
 
 ```powershell
@@ -62,3 +64,6 @@ Add `-Government` to automatically switch the Azure CLI to AzureUSGovernment bef
 > **Note:** Sign in to Azure Government before running: `az login --environment AzureUSGovernment`
 
 Each deployment pulls templates directly from GitHub - no local files are required.
+
+
+

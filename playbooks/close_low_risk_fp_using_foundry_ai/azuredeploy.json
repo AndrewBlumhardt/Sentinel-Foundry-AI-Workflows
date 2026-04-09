@@ -93,7 +93,7 @@
                 },
                 "authentication": {
                   "type": "ManagedServiceIdentity",
-                  "audience": "https://cognitiveservices.azure.us"
+                  "audience": "https://cognitiveservices.azure.com"
                 }
               },
               "runtimeConfiguration": {
@@ -253,3 +253,4 @@
     }
   ]
 }
+
