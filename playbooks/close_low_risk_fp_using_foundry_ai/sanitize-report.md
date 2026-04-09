@@ -1,7 +1,7 @@
 # Sanitization Report
 Version: v3.0
 
-Generated: 2026-04-08 20:16:50 -05:00
+Generated: 2026-04-08 21:08:20 -05:00
 
 ## Files
 - Original template: template.json
@@ -21,10 +21,10 @@ Generated: 2026-04-08 20:16:50 -05:00
 - Removed connectionProperties from 'azuremonitorlogs-1'
 - Normalized connector 'azuremonitorlogs-1' to dynamic connection variable 'azuremonitorlogsConnectionName'
 - Renamed workflow connection alias 'azuremonitorlogs-1' to 'azuremonitorlogs'
-- Added Microsoft.Web/connections stub resource for 'azuresentinel'
-- Labeled 'azuresentinel' connection as PLACEHOLDER-DELETE-AFTER-DEPLOY-* in displayName
 - Added Microsoft.Web/connections stub resource for 'azuremonitorlogs'
 - Labeled 'azuremonitorlogs' connection as PLACEHOLDER-DELETE-AFTER-DEPLOY-* in displayName
+- Added Microsoft.Web/connections stub resource for 'azuresentinel'
+- Labeled 'azuresentinel' connection as PLACEHOLDER-DELETE-AFTER-DEPLOY-* in displayName
 - Added workflow dependsOn for 2 connection stub(s)
 - Connection stubs require post-deploy authorization in the Logic App designer
 

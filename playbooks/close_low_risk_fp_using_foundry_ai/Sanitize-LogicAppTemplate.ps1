@@ -322,8 +322,10 @@ foreach ($resource in $template.resources) {
 
         # Create Microsoft.Web/connections stub resources (Sentinel MCAS sample pattern).
         # These are placeholder connections that the user authorizes post-deploy via the Logic App designer.
+        # Deduplicate by varName - a workflow may have multiple aliases for the same API (e.g. azuresentinel + azuresentinel-2).
+        $uniqueConnections = $connectionsToAdd | Sort-Object varName | Group-Object varName | ForEach-Object { $_.Group[0] }
         $dependsOnList = [System.Collections.Generic.List[string]]::new()
-        foreach ($connToAdd in $connectionsToAdd) {
+        foreach ($connToAdd in $uniqueConnections) {
             $connResource = [pscustomobject][ordered]@{
                 type = 'Microsoft.Web/connections'
                 apiVersion = '2016-06-01'

@@ -1,7 +1,7 @@
 # Sanitization Report
 Version: v3.0
 
-Generated: 2026-04-08 20:39:02 -05:00
+Generated: 2026-04-08 21:08:00 -05:00
 
 ## Files
 - Original template: template.json
@@ -22,9 +22,7 @@ Generated: 2026-04-08 20:39:02 -05:00
 - Renamed workflow connection alias 'azuresentinel-2' to 'azuresentinel'
 - Added Microsoft.Web/connections stub resource for 'azuresentinel'
 - Labeled 'azuresentinel' connection as PLACEHOLDER-DELETE-AFTER-DEPLOY-* in displayName
-- Added Microsoft.Web/connections stub resource for 'azuresentinel'
-- Labeled 'azuresentinel' connection as PLACEHOLDER-DELETE-AFTER-DEPLOY-* in displayName
-- Added workflow dependsOn for 2 connection stub(s)
+- Added workflow dependsOn for 1 connection stub(s)
 - Connection stubs require post-deploy authorization in the Logic App designer
 
 ## Required Inputs Before Deployment

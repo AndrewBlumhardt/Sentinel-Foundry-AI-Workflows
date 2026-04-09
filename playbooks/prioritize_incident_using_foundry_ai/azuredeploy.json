@@ -203,22 +203,9 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]",
-        "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]"
+        "[resourceId('Microsoft.Web/connections', variables('azuremonitorlogsConnectionName'))]",
+        "[resourceId('Microsoft.Web/connections', variables('MicrosoftSentinelConnectionName'))]"
       ]
-    },
-    {
-      "type": "Microsoft.Web/connections",
-      "apiVersion": "2016-06-01",
-      "name": "[variables('MicrosoftSentinelConnectionName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuresentinel')]",
-        "customParameterValues": {},
-        "api": {
-          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
-        }
-      }
     },
     {
       "type": "Microsoft.Web/connections",
@@ -230,6 +217,19 @@
         "customParameterValues": {},
         "api": {
           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuremonitorlogs')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('MicrosoftSentinelConnectionName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[concat('PLACEHOLDER-DELETE-AFTER-DEPLOY-', 'azuresentinel')]",
+        "customParameterValues": {},
+        "api": {
+          "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
         }
       }
     }
