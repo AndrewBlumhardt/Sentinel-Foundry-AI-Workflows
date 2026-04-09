@@ -10,7 +10,7 @@ Generates up to ten investigation or response tasks based on incident details, t
 
 ## Screenshot
 
-<p align="center"><img src="../images/get_incident_tasks_from_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/get_incident_tasks_from_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -25,5 +25,6 @@ Generates up to ten investigation or response tasks based on incident details, t
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override template parameters during deployment if your connection resource IDs or naming differ from the defaults
+
 
 

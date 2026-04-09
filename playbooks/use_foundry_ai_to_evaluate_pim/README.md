@@ -10,7 +10,7 @@ Runs on a daily schedule, queries Entra ID PIM request history from Azure Monito
 
 ## Screenshot
 
-<p align="center"><img src="../images/use_foundry_ai_to_evaluate_pim.png" width="75%"/></p>
+<p align="center"><img src="../../images/use_foundry_ai_to_evaluate_pim.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -25,5 +25,6 @@ Runs on a daily schedule, queries Entra ID PIM request history from Azure Monito
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - This workflow runs on a recurrence trigger rather than Sentinel incident creation
+
 
 

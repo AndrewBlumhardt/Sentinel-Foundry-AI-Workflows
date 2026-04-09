@@ -11,7 +11,7 @@ Compares a Sentinel incident against historical closure patterns and recommends 
 
 ## Screenshot
 
-<p align="center"><img src="../images/close_low_risk_fp_using_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/close_low_risk_fp_using_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -27,5 +27,6 @@ Compares a Sentinel incident against historical closure patterns and recommends 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override connection resource IDs during deployment if they differ from the exported defaults
 - This workflow uses both Sentinel incident data and Azure Monitor history
+
 
 

@@ -10,7 +10,7 @@ Sends incident details including title, severity, and related alerts to the Foun
 
 ## Screenshot
 
-<p align="center"><img src="../images/send_incident_to_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/send_incident_to_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -25,5 +25,6 @@ Sends incident details including title, severity, and related alerts to the Foun
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - Override template parameters during deployment if your Sentinel connection resource ID differs from the default
+
 
 

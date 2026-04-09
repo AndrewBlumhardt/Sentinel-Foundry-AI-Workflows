@@ -11,7 +11,7 @@ Produces an HTML incident summary designed for email or Teams notifications. For
 
 ## Screenshot
 
-<p align="center"><img src="../images/send_incident_to_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/send_incident_to_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -26,5 +26,6 @@ Produces an HTML incident summary designed for email or Teams notifications. For
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - The screenshot currently reuses the incident workflow image due to no separate image file for this workflow
+
 
 

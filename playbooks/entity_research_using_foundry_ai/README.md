@@ -10,7 +10,7 @@ Retrieves entities from a Sentinel incident and enriches them using the model. A
 
 ## Screenshot
 
-<p align="center"><img src="../images/entity_research_using_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/entity_research_using_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -26,5 +26,6 @@ Retrieves entities from a Sentinel incident and enriches them using the model. A
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - This workflow preserves the original exported folder naming
 - Update connection resource IDs if your Sentinel connection names differ from the template defaults
+
 
 

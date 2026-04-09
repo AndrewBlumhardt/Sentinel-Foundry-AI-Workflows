@@ -11,7 +11,7 @@ Evaluates incident severity based on current incident details and historical tre
 
 ## Screenshot
 
-<p align="center"><img src="../images/prioritize_incident_using_foundry_ai.png" width="75%"/></p>
+<p align="center"><img src="../../images/prioritize_incident_using_foundry_ai.png" width="75%"/></p>
 
 ## Deploy to Azure
 
@@ -26,5 +26,6 @@ Evaluates incident severity based on current incident details and historical tre
 
 - This workflow is part of an API-first SOC pattern where Logic Apps orchestrate inputs and a shared private Foundry endpoint performs the AI task
 - This workflow depends on both Sentinel and Azure Monitor Logs connections
+
 
 
